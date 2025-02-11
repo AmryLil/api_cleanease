@@ -1,13 +1,17 @@
 package main
 
 import (
-	"blueprint_golang/config"
-	"blueprint_golang/features/product"
-	"blueprint_golang/features/product/handler"
-	"blueprint_golang/features/product/repository"
-	"blueprint_golang/features/product/usecase"
-	"blueprint_golang/routes"
-	"blueprint_golang/utils"
+	"api_cleanease/config"
+	"api_cleanease/features/packages"
+	ph "api_cleanease/features/packages/handler"
+	pr "api_cleanease/features/packages/repository"
+	pu "api_cleanease/features/packages/usecase"
+	"api_cleanease/features/services"
+	sh "api_cleanease/features/services/handler"
+	sr "api_cleanease/features/services/repository"
+	su "api_cleanease/features/services/usecase"
+	"api_cleanease/routes"
+	"api_cleanease/utils"
 	"fmt"
 	"net/http"
 
@@ -20,16 +24,26 @@ func main() {
 	r.GET("/", func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "hello!😍")
 	})
+	routes.Packages(r, PackagesHandler())
+	routes.Services(r, ServicesHandler())
 
-	routes.Products(r, ProductHandler())
 	r.Run(fmt.Sprintf(":%s", cfg.SERVER_PORT))
 }
 
-func ProductHandler() product.Handler {
+func ServicesHandler() services.Handler {
 	db := utils.InitDB()
-	db.AutoMigrate(product.Product{})
+	db.AutoMigrate(services.Services{})
+	repo := sr.New(db)
+	usecase := su.New(repo)
+	return sh.New(usecase)
 
-	repo := repository.New(db)
-	usecase := usecase.New(repo)
-	return handler.New(usecase)
+}
+
+func PackagesHandler() packages.Handler {
+	db := utils.InitDB()
+	db.AutoMigrate(packages.Packages{})
+	repo := pr.New(db)
+	usecase := pu.New(repo)
+	return ph.New(usecase)
+
 }

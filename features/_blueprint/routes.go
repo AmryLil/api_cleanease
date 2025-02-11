@@ -1,13 +1,13 @@
 package routes
 
 import (
-	"blueprint_golang/features/_blueprint"
+	"api_cleanease/features/_blueprint"
 
 	"github.com/gin-gonic/gin"
 )
 
 func Placeholders(r *gin.Engine, handler _blueprint.Handler) {
-	placeholders := r.Group("/placeholders")
+	placeholders := r.Group("/placeholder")
 
 	placeholders.GET("", handler.GetPlaceholders)
 	placeholders.POST("", handler.CreatePlaceholder)

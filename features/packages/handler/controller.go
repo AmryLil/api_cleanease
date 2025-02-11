@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"blueprint_golang/features/product"
-	"blueprint_golang/features/product/dtos"
-	"blueprint_golang/helpers"
+	"api_cleanease/features/packages"
+	"api_cleanease/features/packages/dtos"
+	"api_cleanease/helpers"
 	"net/http"
 	"strconv"
 
@@ -12,10 +12,10 @@ import (
 )
 
 type controller struct {
-	service product.Usecase
+	service packages.Usecase
 }
 
-func New(service product.Usecase) product.Handler {
+func New(service packages.Usecase) packages.Handler {
 	return &controller{
 		service: service,
 	}
@@ -23,7 +23,7 @@ func New(service product.Usecase) product.Handler {
 
 var validate *validator.Validate
 
-func (ctl *controller) GetProducts(c *gin.Context) {
+func (ctl *controller) GetPackagess(c *gin.Context) {
 	var pagination dtos.Pagination
 	if err := c.ShouldBindJSON(&pagination); err != nil {
 		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse("Please provide valid pagination data!"))
@@ -37,15 +37,15 @@ func (ctl *controller) GetProducts(c *gin.Context) {
 	page := pagination.Page
 	pageSize := pagination.Size
 
-	products, total, err := ctl.service.FindAll(page, pageSize)
+	packagess, total, err := ctl.service.FindAll(page, pageSize)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, helpers.BuildErrorResponse(err.Error()))
 		return
 	}
 
-	if products == nil {
-		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse("There is No Products!"))
+	if packagess == nil {
+		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse("There is No Packagess!"))
 		return
 	}
 
@@ -53,40 +53,40 @@ func (ctl *controller) GetProducts(c *gin.Context) {
 
 	c.JSON(http.StatusOK, helpers.ResponseGetAllSuccess{
 		Status:     true,
-		Message:    "Get All Products Success",
-		Data:       products,
+		Message:    "Get All Packagess Success",
+		Data:       packagess,
 		Pagination: paginationData,
 	})
 }
 
-func (ctl *controller) ProductDetails(c *gin.Context) {
-	productID, err := strconv.ParseUint(c.Param("id"), 10, 64)
+func (ctl *controller) PackagesDetails(c *gin.Context) {
+	packagesID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse(err.Error()))
 		return
 	}
 
-	product, err := ctl.service.FindByID(uint(productID))
+	packages, err := ctl.service.FindByID(uint(packagesID))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, helpers.BuildErrorResponse(err.Error()))
 		return
 	}
 
-	if product == nil {
-		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse("Product Not Found!"))
+	if packages == nil {
+		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse("Packages Not Found!"))
 		return
 	}
 
 	c.JSON(http.StatusOK, helpers.ResponseGetDetailSuccess{
-		Data:    product,
+		Data:    packages,
 		Status:  true,
-		Message: " Get Product Detail Success",
+		Message: " Get Packages Detail Success",
 	})
 }
 
-func (ctl *controller) CreateProduct(c *gin.Context) {
-	var input dtos.InputProduct
+func (ctl *controller) CreatePackages(c *gin.Context) {
+	var input dtos.InputPackages
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse("Invalid request!"))
@@ -112,27 +112,27 @@ func (ctl *controller) CreateProduct(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, helpers.ResponseCUDSuccess{
-		Message: " Create Product Success",
+		Message: " Create Packages Success",
 		Status:  true,
 	})
 }
 
-func (ctl *controller) UpdateProduct(c *gin.Context) {
-	var input dtos.InputProduct
-	productID, err := strconv.ParseUint(c.Param("id"), 10, 64)
+func (ctl *controller) UpdatePackages(c *gin.Context) {
+	var input dtos.InputPackages
+	packagesID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse(err.Error()))
 		return
 	}
 
-	product, err := ctl.service.FindByID(uint(productID))
+	packages, err := ctl.service.FindByID(uint(packagesID))
 	if err != nil {
 		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse(err.Error()))
 		return
 	}
 
-	if product == nil {
-		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse("Product Not Found!"))
+	if packages == nil {
+		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse("Packages Not Found!"))
 		return
 	}
 
@@ -152,7 +152,7 @@ func (ctl *controller) UpdateProduct(c *gin.Context) {
 		return
 	}
 
-	err = ctl.service.Modify(input, uint(productID))
+	err = ctl.service.Modify(input, uint(packagesID))
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, helpers.BuildErrorResponse(err.Error()))
@@ -160,32 +160,32 @@ func (ctl *controller) UpdateProduct(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, helpers.ResponseCUDSuccess{
-		Message: " Update Product Success",
+		Message: " Update Packages Success",
 		Status:  true,
 	})
 }
 
-func (ctl *controller) DeleteProduct(c *gin.Context) {
-	productID, err := strconv.ParseUint(c.Param("id"), 10, 64)
+func (ctl *controller) DeletePackages(c *gin.Context) {
+	packagesID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse(err.Error()))
 		return
 	}
 
-	product, err := ctl.service.FindByID(uint(productID))
+	packages, err := ctl.service.FindByID(uint(packagesID))
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse(err.Error()))
 		return
 	}
 
-	if product == nil {
-		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse("Product Not Found!"))
+	if packages == nil {
+		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse("Packages Not Found!"))
 		return
 	}
 
-	err = ctl.service.Remove(uint(productID))
+	err = ctl.service.Remove(uint(packagesID))
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, helpers.BuildErrorResponse(err.Error()))
@@ -193,7 +193,7 @@ func (ctl *controller) DeleteProduct(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, helpers.ResponseCUDSuccess{
-		Message: " Delete Product Success",
+		Message: " Delete Packages Success",
 		Status:  true,
 	})
 }

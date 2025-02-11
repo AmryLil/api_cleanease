@@ -1,9 +1,9 @@
 package usecase
 
 import (
-	"blueprint_golang/features/_blueprint"
-	"blueprint_golang/features/_blueprint/dtos"
-	"blueprint_golang/helpers"
+	"api_cleanease/features/_blueprint"
+	"api_cleanease/features/_blueprint/dtos"
+	"api_cleanease/helpers"
 
 	"github.com/labstack/gommon/log"
 	"github.com/mashingan/smapping"

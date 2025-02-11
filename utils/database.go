@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"blueprint_golang/config"
+	"api_cleanease/config"
 	"fmt"
 	"log"
 

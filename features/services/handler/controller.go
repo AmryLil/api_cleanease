@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"api_cleanease/features/_blueprint"
-	"api_cleanease/features/_blueprint/dtos"
+	"api_cleanease/features/services"
+	"api_cleanease/features/services/dtos"
 	"api_cleanease/helpers"
 	"net/http"
 	"strconv"
@@ -12,10 +12,10 @@ import (
 )
 
 type controller struct {
-	service _blueprint.Usecase
+	service services.Usecase
 }
 
-func New(service _blueprint.Usecase) _blueprint.Handler {
+func New(service services.Usecase) services.Handler {
 	return &controller{
 		service: service,
 	}
@@ -23,7 +23,7 @@ func New(service _blueprint.Usecase) _blueprint.Handler {
 
 var validate *validator.Validate
 
-func (ctl *controller) GetPlaceholders(c *gin.Context) {
+func (ctl *controller) GetServicess(c *gin.Context) {
 	var pagination dtos.Pagination
 	if err := c.ShouldBindJSON(&pagination); err != nil {
 		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse("Please provide valid pagination data!"))
@@ -37,15 +37,15 @@ func (ctl *controller) GetPlaceholders(c *gin.Context) {
 	page := pagination.Page
 	pageSize := pagination.Size
 
-	placeholders, total, err := ctl.service.FindAll(page, pageSize)
+	servicess, total, err := ctl.service.FindAll(page, pageSize)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, helpers.BuildErrorResponse(err.Error()))
 		return
 	}
 
-	if placeholders == nil {
-		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse("There is No Placeholders!"))
+	if servicess == nil {
+		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse("There is No Servicess!"))
 		return
 	}
 
@@ -53,40 +53,40 @@ func (ctl *controller) GetPlaceholders(c *gin.Context) {
 
 	c.JSON(http.StatusOK, helpers.ResponseGetAllSuccess{
 		Status:     true,
-		Message:    "Get All Placeholders Success",
-		Data:       placeholders,
+		Message:    "Get All Servicess Success",
+		Data:       servicess,
 		Pagination: paginationData,
 	})
 }
 
-func (ctl *controller) PlaceholderDetails(c *gin.Context) {
-	placeholderID, err := strconv.ParseUint(c.Param("id"), 10, 64)
+func (ctl *controller) ServicesDetails(c *gin.Context) {
+	servicesID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse(err.Error()))
 		return
 	}
 
-	placeholder, err := ctl.service.FindByID(uint(placeholderID))
+	services, err := ctl.service.FindByID(uint(servicesID))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, helpers.BuildErrorResponse(err.Error()))
 		return
 	}
 
-	if placeholder == nil {
-		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse("Placeholder Not Found!"))
+	if services == nil {
+		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse("Services Not Found!"))
 		return
 	}
 
 	c.JSON(http.StatusOK, helpers.ResponseGetDetailSuccess{
-		Data:    placeholder,
+		Data:    services,
 		Status:  true,
-		Message: " Get Placeholder Detail Success",
+		Message: " Get Services Detail Success",
 	})
 }
 
-func (ctl *controller) CreatePlaceholder(c *gin.Context) {
-	var input dtos.InputPlaceholder
+func (ctl *controller) CreateServices(c *gin.Context) {
+	var input dtos.InputServices
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse("Invalid request!"))
@@ -112,27 +112,27 @@ func (ctl *controller) CreatePlaceholder(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, helpers.ResponseCUDSuccess{
-		Message: " Create Placeholder Success",
+		Message: " Create Services Success",
 		Status:  true,
 	})
 }
 
-func (ctl *controller) UpdatePlaceholder(c *gin.Context) {
-	var input dtos.InputPlaceholder
-	placeholderID, err := strconv.ParseUint(c.Param("id"), 10, 64)
+func (ctl *controller) UpdateServices(c *gin.Context) {
+	var input dtos.InputServices
+	servicesID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse(err.Error()))
 		return
 	}
 
-	placeholder, err := ctl.service.FindByID(uint(placeholderID))
+	services, err := ctl.service.FindByID(uint(servicesID))
 	if err != nil {
 		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse(err.Error()))
 		return
 	}
 
-	if placeholder == nil {
-		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse("Placeholder Not Found!"))
+	if services == nil {
+		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse("Services Not Found!"))
 		return
 	}
 
@@ -152,7 +152,7 @@ func (ctl *controller) UpdatePlaceholder(c *gin.Context) {
 		return
 	}
 
-	err = ctl.service.Modify(input, uint(placeholderID))
+	err = ctl.service.Modify(input, uint(servicesID))
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, helpers.BuildErrorResponse(err.Error()))
@@ -160,32 +160,32 @@ func (ctl *controller) UpdatePlaceholder(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, helpers.ResponseCUDSuccess{
-		Message: " Update Placeholder Success",
+		Message: " Update Services Success",
 		Status:  true,
 	})
 }
 
-func (ctl *controller) DeletePlaceholder(c *gin.Context) {
-	placeholderID, err := strconv.ParseUint(c.Param("id"), 10, 64)
+func (ctl *controller) DeleteServices(c *gin.Context) {
+	servicesID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse(err.Error()))
 		return
 	}
 
-	placeholder, err := ctl.service.FindByID(uint(placeholderID))
+	services, err := ctl.service.FindByID(uint(servicesID))
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse(err.Error()))
 		return
 	}
 
-	if placeholder == nil {
-		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse("Placeholder Not Found!"))
+	if services == nil {
+		c.JSON(http.StatusNotFound, helpers.BuildErrorResponse("Services Not Found!"))
 		return
 	}
 
-	err = ctl.service.Remove(uint(placeholderID))
+	err = ctl.service.Remove(uint(servicesID))
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, helpers.BuildErrorResponse(err.Error()))
@@ -193,7 +193,7 @@ func (ctl *controller) DeletePlaceholder(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, helpers.ResponseCUDSuccess{
-		Message: " Delete Placeholder Success",
+		Message: " Delete Services Success",
 		Status:  true,
 	})
 }

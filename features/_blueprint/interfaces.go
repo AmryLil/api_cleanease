@@ -1,7 +1,7 @@
 package _blueprint
 
 import (
-	"blueprint_golang/features/_blueprint/dtos"
+	"api_cleanease/features/_blueprint/dtos"
 
 	"github.com/gin-gonic/gin"
 )
