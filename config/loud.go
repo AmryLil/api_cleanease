@@ -75,3 +75,30 @@ func loadConfig() *ProgramConfig {
 	}
 	return res
 }
+
+type AWSConfig struct {
+	AccessKeyID     string
+	AccessKeySecret string
+	Region          string
+}
+
+func LoadAwsConfig() *AWSConfig {
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Printf("Error loading .env file: %v", err)
+	} else {
+		log.Println(".env file loaded successfully")
+	}
+
+	var res = new(AWSConfig)
+	if val, found := os.LookupEnv("AWS_ACCESS_KEY_ID"); found {
+		res.AccessKeyID = val
+	}
+	if val, found := os.LookupEnv("AWS_ACCESS_KEY_SECRET"); found {
+		res.AccessKeySecret = val
+	}
+	if val, found := os.LookupEnv("AWS_REGION"); found {
+		res.Region = val
+	}
+	return res
+}

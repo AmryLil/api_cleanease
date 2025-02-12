@@ -15,6 +15,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/aws/aws-sdk-go/service/s3"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -26,6 +28,14 @@ func main() {
 	})
 	routes.Packages(r, PackagesHandler())
 	routes.Services(r, ServicesHandler())
+	sess, err := utils.NewSession()
+	if err != nil {
+		fmt.Println("Failed to create AWS session:", err)
+		return
+	}
+
+	s3Client := s3.New(sess)
+	fmt.Println("S3 session & client initialized", s3Client)
 
 	r.Run(fmt.Sprintf(":%s", cfg.SERVER_PORT))
 }
