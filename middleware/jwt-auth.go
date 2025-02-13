@@ -12,20 +12,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type JWTInterface interface {
-	// SSO Apps
-	GenerateJWTSSO(userID string, personID string, roleID string, grupID string, aplikasiID string) map[string]any
-	GenerateTokenSSO(userID string, personID string, roleID string, grupID string, aplikasiID string) string
-
-	// User
-	GenerateJWT(userID string, personID string, roleID string) map[string]any
-	GenerateToken(userID string, personID string, roleID string) string
-	ExtractToken(token *jwt.Token) any
-	ValidateToken(token string, secret string) (*jwt.Token, error)
-	RefereshJWT(refreshToken *jwt.Token) map[string]any
-}
-
-func AuthorizeJWT(jwtService JWTInterface, role int, secret string) gin.HandlerFunc {
+func AuthorizeJWT(jwtService helpers.JWTInterface, role int, secret string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {

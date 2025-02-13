@@ -32,6 +32,8 @@ func InitConfig() *ProgramConfig {
 
 type ProgramConfig struct {
 	SERVER_PORT string
+	SECRET      string
+	REFSECRET   string
 }
 
 func LoadDBConfig() *DatabaseConfig {
@@ -72,6 +74,12 @@ func loadConfig() *ProgramConfig {
 
 	if val, found := os.LookupEnv("SERVER_PORT"); found {
 		res.SERVER_PORT = val
+	}
+	if val, found := os.LookupEnv("SECRET"); found {
+		res.SECRET = val
+	}
+	if val, found := os.LookupEnv("REFSECRET"); found {
+		res.REFSECRET = val
 	}
 	return res
 }
