@@ -11,3 +11,7 @@ type JWTInterface interface {
 	ValidateToken(token string, secret string) (*jwt.Token, error)
 	RefereshJWT(refreshToken *jwt.Token) map[string]any
 }
+
+type ValidationInterface interface {
+	ValidateRequest(request any) ([]string, error)
+}

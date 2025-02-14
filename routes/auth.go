@@ -11,6 +11,7 @@ func Users(r *gin.Engine, handler user.Handler) {
 
 	users.GET("", handler.GetUsers)
 	users.POST("", handler.CreateUser)
+	users.POST("/login", handler.Login)
 
 	users.GET("/:id", handler.UserDetails)
 	users.PUT("/:id", handler.UpdateUser)

@@ -73,9 +73,13 @@ func PackagesHandler() packages.Handler {
 func AuthHandler() auth.Handler {
 	db := utils.InitDB()
 	db.AutoMigrate(&auth.User{}, &auth.UserDetails{})
+	config := config.InitConfig()
+
+	jwt := helpers.NewJWT(*config)
 	hash := helpers.NewHash()
+	validation := helpers.NewValidationRequest()
 	repo := ar.New(db)
-	usecase := au.New(repo, hash)
+	usecase := au.New(repo, hash, validation, jwt)
 	return ah.New(usecase)
 }
 func OrdersHandler() orders.Handler {

@@ -4,6 +4,8 @@ import (
 	user "api_cleanease/features/auth"
 	"api_cleanease/features/auth/dtos"
 	"api_cleanease/helpers"
+	"errors"
+	"strconv"
 	"time"
 
 	"github.com/labstack/gommon/log"
@@ -11,14 +13,18 @@ import (
 )
 
 type service struct {
-	model user.Repository
-	hash  helpers.HashInterface
+	model     user.Repository
+	hash      helpers.HashInterface
+	validator helpers.ValidationInterface
+	jwt       helpers.JWT
 }
 
-func New(model user.Repository, hash helpers.HashInterface) user.Usecase {
+func New(model user.Repository, hash helpers.HashInterface, validator helpers.ValidationInterface, jwt helpers.JWT) user.Usecase {
 	return &service{
-		model: model,
-		hash:  hash,
+		model:     model,
+		hash:      hash,
+		validator: validator,
+		jwt:       jwt,
 	}
 }
 
@@ -89,6 +95,30 @@ func (svc *service) Create(newUser dtos.InputUser) error {
 	}
 
 	return nil
+}
+
+func (svc *service) Login(user dtos.LoginRequest) (*dtos.ResUser, error) {
+	errMap, err := svc.validator.ValidateRequest(user)
+	if errMap != nil {
+		log.Error(errMap)
+		return nil, err
+	}
+
+	userData, err := svc.model.GetUserByEmail(user.Email)
+	if err != nil {
+		log.Error(err)
+	}
+	if !svc.hash.CompareHash(user.Password, userData.Password) {
+		return nil, errors.New("invalid Password")
+	}
+
+	resUser := dtos.ResUser{}
+	userType := strconv.Itoa(userData.UserType)
+	tokenData := svc.jwt.GenerateJWT(string(userData.ID), userType)
+	resUser.AccessToken = tokenData["access_token"].(string)
+	resUser.RefreshToken = tokenData["refresh_token"].(string)
+	return &resUser, nil
+
 }
 
 func (svc *service) Modify(userData dtos.InputUser, userID uint) error {

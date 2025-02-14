@@ -10,6 +10,8 @@ type Repository interface {
 	GetAll(page, size int) ([]User, int64, error)
 	Insert(newUser User) error
 	SelectByID(userID uint) (*User, error)
+	CheckEmailExist(email string) error
+	GetUserByEmail(email string) (*User, error)
 	Update(user User) error
 	DeleteByID(userID uint) error
 
@@ -24,6 +26,7 @@ type Usecase interface {
 	Remove(userID uint) error
 
 	// auth
+	Login(user dtos.LoginRequest) (*dtos.ResUser, error)
 }
 
 type Handler interface {
@@ -32,4 +35,7 @@ type Handler interface {
 	CreateUser(c *gin.Context)
 	UpdateUser(c *gin.Context)
 	DeleteUser(c *gin.Context)
+
+	// auth
+	Login(c *gin.Context)
 }

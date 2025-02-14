@@ -197,3 +197,23 @@ func (ctl *controller) DeleteUser(c *gin.Context) {
 		Status:  true,
 	})
 }
+
+func (ctl *controller) Login(c *gin.Context) {
+	var input dtos.LoginRequest
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse(err.Error()))
+		return
+	}
+	user, err := ctl.service.Login(input)
+
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, helpers.BuildErrorResponse(err.Error()))
+		return
+	}
+	c.JSON(http.StatusOK, helpers.ResponseAuth{
+		Status:  true,
+		Message: " User berhasil login",
+		Data:    user,
+	})
+
+}

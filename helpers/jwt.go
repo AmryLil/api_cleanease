@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"api_cleanease/config"
 	"fmt"
 	"net/http"
 	"os"
@@ -14,6 +15,13 @@ import (
 type JWT struct {
 	signKey    string
 	refreshKey string
+}
+
+func NewJWT(config config.ProgramConfig) JWTInterface {
+	return &JWT{
+		signKey:    config.SECRET,
+		refreshKey: config.REFSECRET,
+	}
 }
 
 func (j *JWT) GenerateJWT(userID string, userType string) map[string]any {

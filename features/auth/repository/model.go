@@ -2,6 +2,7 @@ package repository
 
 import (
 	user "api_cleanease/features/auth"
+	"errors"
 
 	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"
@@ -36,6 +37,28 @@ func (mdl *model) GetAll(page, size int) ([]user.User, int64, error) {
 	}
 
 	return users, total, nil
+}
+
+func (mdl *model) CheckEmailExist(email string) error {
+	var user user.User
+	result := mdl.db.Where("email = ?", email).First(&user)
+
+	if result.RowsAffected > 0 {
+		return errors.New("email already exists")
+	}
+
+	return nil
+}
+
+func (mdl *model) GetUserByEmail(email string) (*user.User, error) {
+	var user user.User
+	result := mdl.db.Where("email = ?", email).First(&user)
+
+	if result.Error != nil {
+		return nil, errors.New("user not found")
+	}
+
+	return &user, nil
 }
 
 func (mdl *model) Insert(newUser user.User) error {
