@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Orderss(r *gin.Engine, handler orders.Handler) {
+func Orders(r *gin.Engine, handler orders.Handler) {
 	orderss := r.Group("/orders")
 
 	orderss.GET("", handler.GetOrderss)
