@@ -16,10 +16,10 @@ type service struct {
 	model     user.Repository
 	hash      helpers.HashInterface
 	validator helpers.ValidationInterface
-	jwt       helpers.JWT
+	jwt       helpers.JWTInterface
 }
 
-func New(model user.Repository, hash helpers.HashInterface, validator helpers.ValidationInterface, jwt helpers.JWT) user.Usecase {
+func New(model user.Repository, hash helpers.HashInterface, validator helpers.ValidationInterface, jwt helpers.JWTInterface) user.Usecase {
 	return &service{
 		model:     model,
 		hash:      hash,
