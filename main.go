@@ -15,6 +15,7 @@ import (
 	sh "api_cleanease/features/services/handler"
 	sr "api_cleanease/features/services/repository"
 	su "api_cleanease/features/services/usecase"
+	"api_cleanease/helpers"
 
 	oh "api_cleanease/features/orders/handler"
 	or "api_cleanease/features/orders/repository"
@@ -72,13 +73,17 @@ func PackagesHandler() packages.Handler {
 func AuthHandler() auth.Handler {
 	db := utils.InitDB()
 	db.AutoMigrate(&auth.User{}, &auth.UserDetails{})
+	hash := helpers.NewHash()
 	repo := ar.New(db)
-	usecase := au.New(repo)
+	usecase := au.New(repo, hash)
 	return ah.New(usecase)
 }
 func OrdersHandler() orders.Handler {
 	db := utils.InitDB()
-	db.AutoMigrate(&orders.Orders{}, &orders.OrderDetail{})
+	err := db.AutoMigrate(&orders.Orders{}, &orders.OrderDetail{})
+	if err != nil {
+		fmt.Println("Failed to migrate orders:", err) // Debugging
+	}
 	repo := or.New(db)
 	usecase := ou.New(repo)
 	return oh.New(usecase)

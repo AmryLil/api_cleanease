@@ -12,6 +12,8 @@ type Repository interface {
 	SelectByID(userID uint) (*User, error)
 	Update(user User) error
 	DeleteByID(userID uint) error
+
+	// auth
 }
 
 type Usecase interface {
@@ -20,6 +22,8 @@ type Usecase interface {
 	Create(newUser dtos.InputUser) error
 	Modify(userData dtos.InputUser, userID uint) error
 	Remove(userID uint) error
+
+	// auth
 }
 
 type Handler interface {

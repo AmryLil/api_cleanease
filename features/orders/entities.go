@@ -9,10 +9,11 @@ import (
 
 type Orders struct {
 	gorm.Model
-	CustomerID    uint      `gorm:"not null"`
-	Customer      auth.User `gorm:"foreignKey:CustomerID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	TotalPrice    float64   `gorm:"not null"`
-	Status        string    `gorm:"type:varchar(50);default:'pending'"`
+	CustomerID uint      `gorm:"not null"`
+	Customer   auth.User `gorm:"foreignKey:CustomerID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+
+	TotalPrice    float64 `gorm:"not null"`
+	Status        string  `gorm:"type:varchar(50);default:'pending'"`
 	PickupDate    time.Time
 	DeliveryDate  *time.Time    `gorm:"default:null"`
 	PaymentMethod string        `gorm:"type:varchar(50);default:null"`

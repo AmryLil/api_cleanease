@@ -4,6 +4,7 @@ import (
 	user "api_cleanease/features/auth"
 	"api_cleanease/features/auth/dtos"
 	"api_cleanease/helpers"
+	"time"
 
 	"github.com/labstack/gommon/log"
 	"github.com/mashingan/smapping"
@@ -11,11 +12,13 @@ import (
 
 type service struct {
 	model user.Repository
+	hash  helpers.HashInterface
 }
 
-func New(model user.Repository) user.Usecase {
+func New(model user.Repository, hash helpers.HashInterface) user.Usecase {
 	return &service{
 		model: model,
+		hash:  hash,
 	}
 }
 
@@ -73,6 +76,11 @@ func (svc *service) Create(newUser dtos.InputUser) error {
 	}
 
 	user.ID = helpers.GenerateID()
+	user.Password = svc.hash.HashPassword(newUser.Password)
+	user.CreatedAt = time.Now()
+	user.UpdatedAt = time.Now()
+	user.IsActive = true
+	user.UserType = 1
 	err = svc.model.Insert(user)
 
 	if err != nil {
