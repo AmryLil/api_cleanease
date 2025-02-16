@@ -38,7 +38,7 @@ func (mdl *model) GetAll(page, size int) ([]packages.Packages, int64, error) {
 	return packagess, total, nil
 }
 
-func (mdl *model) Insert(newPackages packages.Packages) error {
+func (mdl *model) Insert(newPackages []packages.Packages) error {
 	err := mdl.db.Create(&newPackages).Error
 
 	if err != nil {

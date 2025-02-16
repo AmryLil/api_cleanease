@@ -86,26 +86,14 @@ func (ctl *controller) PackagesDetails(c *gin.Context) {
 }
 
 func (ctl *controller) CreatePackages(c *gin.Context) {
-	var input dtos.InputPackages
+	var input []dtos.InputPackages
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse("Invalid request!"))
 		return
 	}
 
-	validate = validator.New()
-
-	err := validate.Struct(input)
-
-	if err != nil {
-		errMap := helpers.ErrorMapValidation(err)
-		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse("Bad Request!", gin.H{
-			"error": errMap,
-		}))
-		return
-	}
-
-	err = ctl.service.Create(input)
+	err := ctl.service.Create(input)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, helpers.BuildErrorResponse(err.Error()))
 		return
