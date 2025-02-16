@@ -93,19 +93,7 @@ func (ctl *controller) CreateServices(c *gin.Context) {
 		return
 	}
 
-	validate = validator.New()
-
-	err := validate.Struct(input)
-
-	if err != nil {
-		errMap := helpers.ErrorMapValidation(err)
-		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse("Bad Request!", gin.H{
-			"error": errMap,
-		}))
-		return
-	}
-
-	err = ctl.service.Create(input)
+	err := ctl.service.Create(input)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, helpers.BuildErrorResponse(err.Error()))
 		return
