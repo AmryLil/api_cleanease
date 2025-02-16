@@ -8,7 +8,7 @@ import (
 
 type Repository interface {
 	GetAll(page, size int) ([]Services, int64, error)
-	Insert(newServices Services) error
+	Insert(newServices []Services) error
 	SelectByID(servicesID uint) (*Services, error)
 	Update(services Services) error
 	DeleteByID(servicesID uint) error
@@ -17,7 +17,7 @@ type Repository interface {
 type Usecase interface {
 	FindAll(page, size int) ([]dtos.ResServices, int64, error)
 	FindByID(servicesID uint) (*dtos.ResServices, error)
-	Create(newServices dtos.InputServices) error
+	Create(newServices []dtos.InputServices) error
 	Modify(servicesData dtos.InputServices, servicesID uint) error
 	Remove(servicesID uint) error
 }

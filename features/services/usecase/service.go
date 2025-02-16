@@ -63,18 +63,22 @@ func (svc *service) FindByID(servicesID uint) (*dtos.ResServices, error) {
 	return &res, nil
 }
 
-func (svc *service) Create(newServices dtos.InputServices) error {
-	services := services.Services{}
+func (svc *service) Create(newServices []dtos.InputServices) error {
+	var servicesList []services.Services
 
-	err := smapping.FillStruct(&services, smapping.MapFields(newServices))
-	if err != nil {
-		log.Error(err.Error())
-		return nil
+	for _, input := range newServices {
+		var serviceItem services.Services
+		err := smapping.FillStruct(&serviceItem, smapping.MapFields(input))
+		if err != nil {
+			log.Error(err.Error())
+			return err
+		}
+
+		serviceItem.ID = helpers.GenerateID()
+		servicesList = append(servicesList, serviceItem)
 	}
 
-	services.ID = helpers.GenerateID()
-	err = svc.model.Insert(services)
-
+	err := svc.model.Insert(servicesList)
 	if err != nil {
 		log.Error(err.Error())
 		return err

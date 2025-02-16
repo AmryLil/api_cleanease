@@ -38,7 +38,7 @@ func (mdl *model) GetAll(page, size int) ([]services.Services, int64, error) {
 	return servicess, total, nil
 }
 
-func (mdl *model) Insert(newServices services.Services) error {
+func (mdl *model) Insert(newServices []services.Services) error {
 	err := mdl.db.Create(&newServices).Error
 
 	if err != nil {

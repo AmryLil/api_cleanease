@@ -86,7 +86,7 @@ func (ctl *controller) ServicesDetails(c *gin.Context) {
 }
 
 func (ctl *controller) CreateServices(c *gin.Context) {
-	var input dtos.InputServices
+	var input []dtos.InputServices
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse("Invalid request!"))
