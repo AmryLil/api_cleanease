@@ -63,7 +63,7 @@ func ServicesHandler() services.Handler {
 
 func PackagesHandler() packages.Handler {
 	db := utils.InitDB()
-	db.AutoMigrate(packages.Packages{})
+	db.AutoMigrate(packages.Packages{}, packages.IndividualPackages{})
 	repo := pr.New(db)
 	usecase := pu.New(repo)
 	return ph.New(usecase)
