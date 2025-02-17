@@ -90,6 +90,7 @@ func (ctl *controller) CreateServices(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse("Invalid request!"))
+
 		return
 	}
 

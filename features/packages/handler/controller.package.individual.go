@@ -76,7 +76,7 @@ func (ctl *controller) CreateIndividualPackages(c *gin.Context) {
 	var input []dtos.InputIndividualPackages
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse("Invalid request!"))
+		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse(err.Error()))
 		return
 	}
 

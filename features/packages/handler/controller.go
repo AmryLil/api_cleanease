@@ -89,7 +89,7 @@ func (ctl *controller) CreatePackages(c *gin.Context) {
 	var input []dtos.InputPackages
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse("Invalid request!"))
+		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse(err.Error()))
 		return
 	}
 
