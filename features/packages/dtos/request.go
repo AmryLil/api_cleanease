@@ -7,6 +7,12 @@ type InputPackages struct {
 	Cover       string  ` json:"cover"`
 }
 
+type InputIndividualPackages struct {
+	Name  string  `json:"name" binding:"required"`
+	Price float64 `json:"price_per_kg" binding:"required"`
+	Cover string  ` json:"cover"`
+}
+
 type Pagination struct {
 	Page int `query:"page"`
 	Size int `query:"page_size"`

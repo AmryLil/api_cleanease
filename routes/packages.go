@@ -15,4 +15,11 @@ func Packages(r *gin.Engine, handler packages.Handler) {
 	packagess.GET("/:id", handler.PackagesDetails)
 	packagess.PUT("/:id", handler.UpdatePackages)
 	packagess.DELETE("/:id", handler.DeletePackages)
+
+	packagess.GET("/individual", handler.GetIndividualPackages)
+	packagess.POST("/individual", handler.CreateIndividualPackages)
+
+	packagess.GET("/individual/:id", handler.IndividualPackagesDetails)
+	packagess.PUT("/individual/:id", handler.UpdateIndividualPackages)
+	packagess.DELETE("/individual/:id", handler.DeleteIndividualPackages)
 }
