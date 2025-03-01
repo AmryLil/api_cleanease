@@ -1,27 +1,79 @@
 package handler
 
 import (
+	"api_cleanease/config"
 	"api_cleanease/features/packages"
 	"api_cleanease/features/packages/dtos"
 	"api_cleanease/helpers"
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 )
 
 type controller struct {
-	service packages.Usecase
+	service  packages.Usecase
+	uploader *s3manager.Uploader
+	config   config.AWSConfig
 }
 
-func New(service packages.Usecase) packages.Handler {
+func New(service packages.Usecase, uploader *s3manager.Uploader, config config.AWSConfig) packages.Handler {
 	return &controller{
-		service: service,
+		service:  service,
+		uploader: uploader,
+		config:   config,
 	}
 }
 
 var validate *validator.Validate
+
+func (ctl *controller) CreatePackages(c *gin.Context) {
+	file, err := c.FormFile("cover")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse("File cover is required"))
+		return
+	}
+
+	src, err := file.Open()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, helpers.BuildErrorResponse("Failed to open file"))
+		return
+	}
+	defer src.Close()
+
+	err = helpers.UploadFileFromReader(ctl.uploader, src, ctl.config.S3Bucket, file.Filename, file.Size)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, helpers.BuildErrorResponse("Failed to upload to S3"))
+		return
+	}
+
+	imageURL := fmt.Sprintf("https://%s.s3.%s.amazonaws.com/%s", ctl.config.S3Bucket, ctl.config.Region, file.Filename)
+
+	jsonData := c.PostForm("data")
+	var input dtos.InputPackages
+	if err := json.Unmarshal([]byte(jsonData), &input); err != nil {
+		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse("Invalid JSON format"))
+		return
+	}
+
+	input.Cover = imageURL
+
+	err = ctl.service.Create(input)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, helpers.BuildErrorResponse(err.Error()))
+		return
+	}
+
+	// Response sukses
+	c.JSON(http.StatusOK, helpers.ResponseCUDSuccess{
+		Message: "Create Package Success",
+		Status:  true,
+	})
+}
 
 func (ctl *controller) GetPackagess(c *gin.Context) {
 	var pagination dtos.Pagination
@@ -82,26 +134,6 @@ func (ctl *controller) PackagesDetails(c *gin.Context) {
 		Data:    packages,
 		Status:  true,
 		Message: " Get Packages Detail Success",
-	})
-}
-
-func (ctl *controller) CreatePackages(c *gin.Context) {
-	var input []dtos.InputPackages
-
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse(err.Error()))
-		return
-	}
-
-	err := ctl.service.Create(input)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, helpers.BuildErrorResponse(err.Error()))
-		return
-	}
-
-	c.JSON(http.StatusOK, helpers.ResponseCUDSuccess{
-		Message: " Create Packages Success",
-		Status:  true,
 	})
 }
 

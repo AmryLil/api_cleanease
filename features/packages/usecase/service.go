@@ -63,24 +63,18 @@ func (svc *service) FindByID(packagesID uint) (*dtos.ResPackages, error) {
 	return &res, nil
 }
 
-func (svc *service) Create(newPackages []dtos.InputPackages) error {
-	packagesList := []packages.Packages{}
+func (svc *service) Create(newPackage dtos.InputPackages) error {
+	var packageItem packages.Packages
 
-	for _, input := range newPackages {
-		var packageItem packages.Packages
-		err := smapping.FillStruct(&packageItem, smapping.MapFields(input))
-		if err != nil {
-			log.Error(err.Error())
-			return nil
-		}
-
-		packageItem.ID = helpers.GenerateID()
-		packagesList = append(packagesList, packageItem)
-
+	err := smapping.FillStruct(&packageItem, smapping.MapFields(newPackage))
+	if err != nil {
+		log.Error(err.Error())
+		return err
 	}
 
-	err := svc.model.Insert(packagesList)
+	packageItem.ID = helpers.GenerateID()
 
+	err = svc.model.Insert(packageItem) // Tidak pakai slice lagi
 	if err != nil {
 		log.Error(err.Error())
 		return err

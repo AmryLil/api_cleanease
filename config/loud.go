@@ -88,6 +88,7 @@ type AWSConfig struct {
 	AccessKeyID     string
 	AccessKeySecret string
 	Region          string
+	S3Bucket        string
 }
 
 func LoadAwsConfig() *AWSConfig {
@@ -107,6 +108,9 @@ func LoadAwsConfig() *AWSConfig {
 	}
 	if val, found := os.LookupEnv("AWS_REGION"); found {
 		res.Region = val
+	}
+	if val, found := os.LookupEnv("S3_BUCKET"); found {
+		res.S3Bucket = val
 	}
 	return res
 }

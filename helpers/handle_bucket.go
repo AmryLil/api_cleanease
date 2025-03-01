@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"io"
 	"os"
 	"time"
 
@@ -77,4 +78,13 @@ func PresignUrl(client *s3.S3, bucketName string, fileName string) (string, erro
 	}
 
 	return urlStr, nil
+}
+
+func UploadFileFromReader(uploader *s3manager.Uploader, file io.Reader, bucketName string, fileName string, fileSize int64) error {
+	_, err := uploader.Upload(&s3manager.UploadInput{
+		Bucket: aws.String(bucketName),
+		Key:    aws.String(fileName),
+		Body:   file,
+	})
+	return err
 }
