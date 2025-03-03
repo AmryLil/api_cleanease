@@ -94,23 +94,38 @@ type AWSConfig struct {
 func LoadAwsConfig() *AWSConfig {
 	err := godotenv.Load(".env")
 	if err != nil {
-		log.Printf("Error loading .env file: %v", err)
+		log.Printf("❌ Error loading .env file: %v", err)
 	} else {
-		log.Println(".env file loaded successfully")
+		log.Println("✅ .env file loaded successfully")
 	}
 
 	var res = new(AWSConfig)
 	if val, found := os.LookupEnv("AWS_ACCESS_KEY_ID"); found {
 		res.AccessKeyID = val
+	} else {
+		log.Println("❌ AWS_ACCESS_KEY_ID is missing")
 	}
-	if val, found := os.LookupEnv("AWS_ACCESS_KEY_SECRET"); found {
+
+	if val, found := os.LookupEnv("AWS_SECRET_ACCESS_KEY"); found {
 		res.AccessKeySecret = val
+	} else {
+		log.Println("❌ AWS_ACCESS_KEY_SECRET is missing")
 	}
+
 	if val, found := os.LookupEnv("AWS_REGION"); found {
 		res.Region = val
+	} else {
+		log.Println("❌ AWS_REGION is missing")
 	}
+
 	if val, found := os.LookupEnv("S3_BUCKET"); found {
 		res.S3Bucket = val
+	} else {
+		log.Println("⚠️ S3_BUCKET is missing (optional)")
 	}
+
+	// Debugging: Cek nilai yang di-load
+	log.Printf("🔍 AWS Config Loaded: %+v\n", res)
+
 	return res
 }

@@ -5,7 +5,6 @@ import (
 	"api_cleanease/features/packages"
 	"api_cleanease/features/packages/dtos"
 	"api_cleanease/helpers"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -47,20 +46,28 @@ func (ctl *controller) CreatePackages(c *gin.Context) {
 
 	err = helpers.UploadFileFromReader(ctl.uploader, src, ctl.config.S3Bucket, file.Filename, file.Size)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, helpers.BuildErrorResponse("Failed to upload to S3"))
+		c.JSON(http.StatusInternalServerError, helpers.BuildErrorResponse("Failed to upload to S3 "+err.Error()))
 		return
 	}
 
 	imageURL := fmt.Sprintf("https://%s.s3.%s.amazonaws.com/%s", ctl.config.S3Bucket, ctl.config.Region, file.Filename)
 
-	jsonData := c.PostForm("data")
-	var input dtos.InputPackages
-	if err := json.Unmarshal([]byte(jsonData), &input); err != nil {
-		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse("Invalid JSON format"))
+	name := c.PostForm("name")
+	pricePerKgStr := c.PostForm("price_per_kg")
+	description := c.PostForm("description")
+
+	pricePerKg, err := strconv.ParseFloat(pricePerKgStr, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse("Invalid price_per_kg format"))
 		return
 	}
 
-	input.Cover = imageURL
+	input := dtos.InputPackages{
+		Name:        name,
+		PricePerKg:  pricePerKg,
+		Description: description,
+		Cover:       imageURL,
+	}
 
 	err = ctl.service.Create(input)
 	if err != nil {
@@ -68,7 +75,6 @@ func (ctl *controller) CreatePackages(c *gin.Context) {
 		return
 	}
 
-	// Response sukses
 	c.JSON(http.StatusOK, helpers.ResponseCUDSuccess{
 		Message: "Create Package Success",
 		Status:  true,

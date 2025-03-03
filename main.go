@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 
 	"github.com/gin-gonic/gin"
@@ -40,6 +41,14 @@ func main() {
 	routes.Packages(r, PackagesHandler())
 	routes.Services(r, ServicesHandler())
 	routes.Users(r, AuthHandler())
+
+	sess, err := utils.NewSession()
+	if err != nil {
+		fmt.Println("Failed to create AWS session:", err)
+	}
+
+	s3Client := s3.New(sess)
+	fmt.Println("S3 session & client initialized", s3Client)
 
 	r.Run(fmt.Sprintf(":%s", cfg.SERVER_PORT))
 }
@@ -59,6 +68,9 @@ func PackagesHandler() packages.Handler {
 	sess, _ := utils.NewSession()
 
 	uploader := s3manager.NewUploader(sess)
+	if uploader == nil {
+		fmt.Println("Uploader is nil!")
+	}
 	config := config.LoadAwsConfig()
 	repo := pr.New(db)
 	usecase := pu.New(repo)
