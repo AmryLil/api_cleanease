@@ -4,7 +4,8 @@ import "gorm.io/gorm"
 
 type Packages struct {
 	gorm.Model
-	ID          uint    `gorm:"primaryKey"`
+	ID          uint `gorm:"primaryKey"`
+	ServiceID   uint
 	Name        string  `gorm:"type:varchar(255);not null"`
 	PricePerKg  float64 `gorm:"type:decimal(10,2);not null"`
 	Description string  `gorm:"type:text"`
