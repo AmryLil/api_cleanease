@@ -55,7 +55,6 @@ func main() {
 
 func ServicesHandler() services.Handler {
 	db := utils.InitDB()
-	db.AutoMigrate(services.Services{})
 	repo := sr.New(db)
 	usecase := su.New(repo)
 	return sh.New(usecase)
@@ -64,7 +63,6 @@ func ServicesHandler() services.Handler {
 
 func PackagesHandler() packages.Handler {
 	db := utils.InitDB()
-	db.AutoMigrate(packages.Packages{}, packages.IndividualPackages{})
 	sess, _ := utils.NewSession()
 
 	uploader := s3manager.NewUploader(sess)
@@ -80,7 +78,6 @@ func PackagesHandler() packages.Handler {
 
 func AuthHandler() auth.Handler {
 	db := utils.InitDB()
-	db.AutoMigrate(&auth.User{}, &auth.UserDetails{})
 	config := config.InitConfig()
 
 	jwt := helpers.NewJWT(*config)
@@ -92,10 +89,6 @@ func AuthHandler() auth.Handler {
 }
 func OrdersHandler() orders.Handler {
 	db := utils.InitDB()
-	err := db.AutoMigrate(&orders.Orders{}, &orders.OrderDetail{})
-	if err != nil {
-		fmt.Println("Failed to migrate orders:", err) // Debugging
-	}
 	repo := or.New(db)
 	usecase := ou.New(repo)
 	return oh.New(usecase)

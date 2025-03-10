@@ -124,8 +124,6 @@ func LoadAwsConfig() *AWSConfig {
 		log.Println("⚠️ S3_BUCKET is missing (optional)")
 	}
 
-	// Debugging: Cek nilai yang di-load
-	log.Printf("🔍 AWS Config Loaded: %+v\n", res)
 
 	return res
 }
