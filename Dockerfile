@@ -1,4 +1,4 @@
-From docker:1.23.4-alpine
+FROM docker:1.23.4-alpine
 
 WORKDIR /app
 
