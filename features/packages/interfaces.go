@@ -12,7 +12,6 @@ type Repository interface {
 	SelectByID(packagesID uint) (*Packages, error)
 	Update(packages Packages) error
 	DeleteByID(packagesID uint) error
-	// individual package
 	GetAllIndividualPackages(page, size int) ([]IndividualPackages, int64, error)
 	InsertIndividualPackages(newIndividualPackages []IndividualPackages) error
 	SelectIndividualPackagesByID(IndividualPackagesID uint) (*IndividualPackages, error)
