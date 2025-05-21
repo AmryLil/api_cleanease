@@ -55,6 +55,7 @@ func main() {
 
 func ServicesHandler() laundry_services.Handler {
 	db := utils.InitDB()
+	db.AutoMigrate(laundry_services.Services{})
 	repo := sr.New(db)
 	usecase := su.New(repo)
 	return sh.New(usecase)
@@ -63,6 +64,8 @@ func ServicesHandler() laundry_services.Handler {
 
 func PackagesHandler() laundry_packages.Handler {
 	db := utils.InitDB()
+	db.AutoMigrate(laundry_packages.Packages{})
+
 	sess, _ := utils.NewSession()
 
 	uploader := s3manager.NewUploader(sess)
@@ -78,6 +81,9 @@ func PackagesHandler() laundry_packages.Handler {
 
 func AuthHandler() auth.Handler {
 	db := utils.InitDB()
+	db.AutoMigrate(auth.User{})
+	db.AutoMigrate(auth.UserDetails{})
+
 	config := config.InitConfig()
 
 	jwt := helpers.NewJWT(*config)
@@ -89,6 +95,8 @@ func AuthHandler() auth.Handler {
 }
 func OrdersHandler() orders.Handler {
 	db := utils.InitDB()
+	db.AutoMigrate(orders.Orders{})
+	db.AutoMigrate(orders.OrderDetail{})
 	repo := or.New(db)
 	usecase := ou.New(repo)
 	return oh.New(usecase)
