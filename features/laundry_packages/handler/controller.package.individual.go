@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"api_cleanease/features/packages/dtos"
+	"api_cleanease/features/laundry_packages/dtos"
 	"api_cleanease/helpers"
 	"net/http"
 	"strconv"

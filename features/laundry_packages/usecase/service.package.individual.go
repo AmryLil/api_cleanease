@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"api_cleanease/features/packages"
-	"api_cleanease/features/packages/dtos"
+	"api_cleanease/features/laundry_packages"
+	"api_cleanease/features/laundry_packages/dtos"
 	"api_cleanease/helpers"
 
 	"github.com/labstack/gommon/log"
@@ -54,10 +54,10 @@ func (svc *service) FindIndividualPackagesByID(packagesID uint) (*dtos.ResIndivi
 }
 
 func (svc *service) CreateIndividualPackages(newPackages []dtos.InputIndividualPackages) error {
-	packagesList := []packages.IndividualPackages{}
+	packagesList := []laundry_packages.IndividualPackages{}
 
 	for _, input := range newPackages {
-		var packageItem packages.IndividualPackages
+		var packageItem laundry_packages.IndividualPackages
 		err := smapping.FillStruct(&packageItem, smapping.MapFields(input))
 		if err != nil {
 			log.Error(err.Error())
@@ -80,7 +80,7 @@ func (svc *service) CreateIndividualPackages(newPackages []dtos.InputIndividualP
 }
 
 func (svc *service) ModifyIndividualPackages(packagesData dtos.InputIndividualPackages, packagesID uint) error {
-	newPackages := packages.IndividualPackages{}
+	newPackages := laundry_packages.IndividualPackages{}
 
 	err := smapping.FillStruct(&newPackages, smapping.MapFields(packagesData))
 	if err != nil {

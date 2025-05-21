@@ -1,7 +1,7 @@
 package dtos
 
 import (
-	"api_cleanease/features/packages/dtos"
+	"api_cleanease/features/laundry_packages/dtos"
 )
 
 type ResServices struct {

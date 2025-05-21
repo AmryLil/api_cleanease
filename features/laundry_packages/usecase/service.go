@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"api_cleanease/features/packages"
-	"api_cleanease/features/packages/dtos"
+	"api_cleanease/features/laundry_packages"
+	"api_cleanease/features/laundry_packages/dtos"
 	"api_cleanease/helpers"
 
 	"github.com/labstack/gommon/log"
@@ -10,10 +10,10 @@ import (
 )
 
 type service struct {
-	model packages.Repository
+	model laundry_packages.Repository
 }
 
-func New(model packages.Repository) packages.Usecase {
+func New(model laundry_packages.Repository) laundry_packages.Usecase {
 	return &service{
 		model: model,
 	}
@@ -64,7 +64,7 @@ func (svc *service) FindByID(packagesID uint) (*dtos.ResPackages, error) {
 }
 
 func (svc *service) Create(newPackage dtos.InputPackages) error {
-	var packageItem packages.Packages
+	var packageItem laundry_packages.Packages
 
 	err := smapping.FillStruct(&packageItem, smapping.MapFields(newPackage))
 	if err != nil {
@@ -84,7 +84,7 @@ func (svc *service) Create(newPackage dtos.InputPackages) error {
 }
 
 func (svc *service) Modify(packagesData dtos.InputPackages, packagesID uint) error {
-	newPackages := packages.Packages{}
+	newPackages := laundry_packages.Packages{}
 
 	err := smapping.FillStruct(&newPackages, smapping.MapFields(packagesData))
 	if err != nil {

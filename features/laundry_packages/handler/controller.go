@@ -2,8 +2,8 @@ package handler
 
 import (
 	"api_cleanease/config"
-	"api_cleanease/features/packages"
-	"api_cleanease/features/packages/dtos"
+	"api_cleanease/features/laundry_packages"
+	"api_cleanease/features/laundry_packages/dtos"
 	"api_cleanease/helpers"
 	"fmt"
 	"net/http"
@@ -15,12 +15,12 @@ import (
 )
 
 type controller struct {
-	service  packages.Usecase
+	service  laundry_packages.Usecase
 	uploader *s3manager.Uploader
 	config   config.AWSConfig
 }
 
-func New(service packages.Usecase, uploader *s3manager.Uploader, config config.AWSConfig) packages.Handler {
+func New(service laundry_packages.Usecase, uploader *s3manager.Uploader, config config.AWSConfig) laundry_packages.Handler {
 	return &controller{
 		service:  service,
 		uploader: uploader,

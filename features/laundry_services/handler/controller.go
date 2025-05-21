@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"api_cleanease/features/services"
-	"api_cleanease/features/services/dtos"
+	"api_cleanease/features/laundry_services"
+	"api_cleanease/features/laundry_services/dtos"
 	"api_cleanease/helpers"
 	"net/http"
 	"strconv"
@@ -12,10 +12,10 @@ import (
 )
 
 type controller struct {
-	service services.Usecase
+	service laundry_services.Usecase
 }
 
-func New(service services.Usecase) services.Handler {
+func New(service laundry_services.Usecase) laundry_services.Handler {
 	return &controller{
 		service: service,
 	}

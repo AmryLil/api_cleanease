@@ -6,15 +6,15 @@ import (
 	ah "api_cleanease/features/auth/handler"
 	ar "api_cleanease/features/auth/repository"
 	au "api_cleanease/features/auth/usecase"
+	"api_cleanease/features/laundry_packages"
+	ph "api_cleanease/features/laundry_packages/handler"
+	pr "api_cleanease/features/laundry_packages/repository"
+	pu "api_cleanease/features/laundry_packages/usecase"
+	"api_cleanease/features/laundry_services"
+	sh "api_cleanease/features/laundry_services/handler"
+	sr "api_cleanease/features/laundry_services/repository"
+	su "api_cleanease/features/laundry_services/usecase"
 	"api_cleanease/features/orders"
-	"api_cleanease/features/packages"
-	ph "api_cleanease/features/packages/handler"
-	pr "api_cleanease/features/packages/repository"
-	pu "api_cleanease/features/packages/usecase"
-	"api_cleanease/features/services"
-	sh "api_cleanease/features/services/handler"
-	sr "api_cleanease/features/services/repository"
-	su "api_cleanease/features/services/usecase"
 	"api_cleanease/helpers"
 
 	oh "api_cleanease/features/orders/handler"
@@ -53,7 +53,7 @@ func main() {
 	r.Run(fmt.Sprintf(":%s", cfg.SERVER_PORT))
 }
 
-func ServicesHandler() services.Handler {
+func ServicesHandler() laundry_services.Handler {
 	db := utils.InitDB()
 	repo := sr.New(db)
 	usecase := su.New(repo)
@@ -61,7 +61,7 @@ func ServicesHandler() services.Handler {
 
 }
 
-func PackagesHandler() packages.Handler {
+func PackagesHandler() laundry_packages.Handler {
 	db := utils.InitDB()
 	sess, _ := utils.NewSession()
 

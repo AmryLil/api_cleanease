@@ -1,12 +1,12 @@
 package routes
 
 import (
-	"api_cleanease/features/packages"
+	"api_cleanease/features/laundry_packages"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Packages(r *gin.Engine, handler packages.Handler) {
+func Packages(r *gin.Engine, handler laundry_packages.Handler) {
 	packagess := r.Group("/packages")
 
 	packagess.GET("", handler.GetPackagess)

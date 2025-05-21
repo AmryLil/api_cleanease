@@ -1,7 +1,7 @@
-package packages
+package laundry_packages
 
 import (
-	"api_cleanease/features/packages/dtos"
+	"api_cleanease/features/laundry_packages/dtos"
 
 	"github.com/gin-gonic/gin"
 )

@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"api_cleanease/features/services"
+	"api_cleanease/features/laundry_services"
 
 	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"
@@ -11,14 +11,14 @@ type model struct {
 	db *gorm.DB
 }
 
-func New(db *gorm.DB) services.Repository {
+func New(db *gorm.DB) laundry_services.Repository {
 	return &model{
 		db: db,
 	}
 }
 
-func (mdl *model) GetAll(page, size int) ([]services.Services, int64, error) {
-	var servicess []services.Services
+func (mdl *model) GetAll(page, size int) ([]laundry_services.Services, int64, error) {
+	var servicess []laundry_services.Services
 	var total int64
 
 	if err := mdl.db.Model(&servicess).
@@ -38,7 +38,7 @@ func (mdl *model) GetAll(page, size int) ([]services.Services, int64, error) {
 	return servicess, total, nil
 }
 
-func (mdl *model) Insert(newServices []services.Services) error {
+func (mdl *model) Insert(newServices []laundry_services.Services) error {
 	err := mdl.db.Create(&newServices).Error
 
 	if err != nil {
@@ -49,8 +49,8 @@ func (mdl *model) Insert(newServices []services.Services) error {
 	return nil
 }
 
-func (mdl *model) SelectByID(servicesID uint) (*services.Services, error) {
-	var services services.Services
+func (mdl *model) SelectByID(servicesID uint) (*laundry_services.Services, error) {
+	var services laundry_services.Services
 	err := mdl.db.First(&services, servicesID).Error
 
 	if err != nil {
@@ -61,7 +61,7 @@ func (mdl *model) SelectByID(servicesID uint) (*services.Services, error) {
 	return &services, nil
 }
 
-func (mdl *model) Update(services services.Services) error {
+func (mdl *model) Update(services laundry_services.Services) error {
 	err := mdl.db.Updates(&services).Error
 
 	if err != nil {
@@ -72,7 +72,7 @@ func (mdl *model) Update(services services.Services) error {
 }
 
 func (mdl *model) DeleteByID(servicesID uint) error {
-	err := mdl.db.Delete(&services.Services{}, servicesID).Error
+	err := mdl.db.Delete(&laundry_services.Services{}, servicesID).Error
 
 	if err != nil {
 		log.Error(err)

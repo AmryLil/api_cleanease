@@ -1,4 +1,4 @@
-package packages
+package laundry_packages
 
 import "gorm.io/gorm"
 
