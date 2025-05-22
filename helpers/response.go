@@ -21,8 +21,9 @@ type ResponseCUDSuccess struct {
 }
 
 type ResponseError struct {
-	Status  bool   `json:"status" example:"false"`
-	Message string `json:"message" example:"error message"`
+	Status  bool        `json:"status" example:"false"`
+	Message string      `json:"message" example:"Error message"`
+	Data    interface{} `json:"data,omitempty"`
 }
 
 type Pagination struct {
@@ -286,4 +287,3 @@ func BuildResponseStatusInternalServerError(p ErrorParam) ResponseStatusInternal
 	response.Error.Suggestion = p.Suggestion
 	return response
 }
-

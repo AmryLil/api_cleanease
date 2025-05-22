@@ -1,0 +1,325 @@
+basePath: /api/v1
+definitions:
+  dtos.InputUser:
+    properties:
+      email:
+        example: john@example.com
+        type: string
+      name:
+        example: John Doe
+        type: string
+      password:
+        example: password123
+        minLength: 6
+        type: string
+      user_type:
+        example: 1
+        type: integer
+    required:
+    - email
+    - name
+    - password
+    type: object
+  dtos.LoginRequest:
+    properties:
+      email:
+        example: john@example.com
+        type: string
+      password:
+        example: password123
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  helpers.Pagination:
+    properties:
+      current_page:
+        example: 1
+        type: integer
+      next_page:
+        example: 2
+        type: integer
+      page_size:
+        example: 5
+        type: integer
+      previous_page:
+        example: 0
+        type: integer
+      total_data:
+        example: 50
+        type: integer
+      total_page:
+        example: 10
+        type: integer
+    type: object
+  helpers.ResponseAuth:
+    properties:
+      data: {}
+      message:
+        example: error message
+        type: string
+      status:
+        example: false
+        type: boolean
+    type: object
+  helpers.ResponseCUDSuccess:
+    properties:
+      message:
+        example: Success
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  helpers.ResponseError:
+    properties:
+      data: {}
+      message:
+        example: Error message
+        type: string
+      status:
+        example: false
+        type: boolean
+    type: object
+  helpers.ResponseGetAllSuccess:
+    properties:
+      data: {}
+      message:
+        example: success message
+        type: string
+      pagination:
+        $ref: '#/definitions/helpers.Pagination'
+      status:
+        example: true
+        type: boolean
+    type: object
+  helpers.ResponseGetDetailSuccess:
+    properties:
+      data: {}
+      message:
+        example: success message
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: API Documentation
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user with email/username and password
+      parameters:
+      - description: Login credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.ResponseAuth'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: User login
+      tags:
+      - authentication
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a paginated list of all users in the system
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 5
+        description: Items per page
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.ResponseGetAllSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Get all users with pagination
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Delete a user
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Retrieve detailed information about a specific user by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.ResponseGetDetailSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Get user by ID
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Update user information by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated user information
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.InputUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Update an existing user
+      tags:
+      - users
+  /users/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user with the provided information
+      parameters:
+      - description: User information
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.InputUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Create a new user
+      tags:
+      - users
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

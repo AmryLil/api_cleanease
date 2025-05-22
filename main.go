@@ -27,10 +27,30 @@ import (
 
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"github.com/gin-gonic/gin"
+
+	_ "api_cleanease/docs"
 )
 
+// @title           API Documentation
+// @version         1.0
+// @description     This is a sample server.
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   API Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host      localhost:8080
+// @BasePath  /api/v1
+
+// @securityDefinitions.basic  BasicAuth
 func main() {
 	r := gin.Default()
 	cfg := config.InitConfig()
@@ -49,6 +69,7 @@ func main() {
 
 	s3Client := s3.New(sess)
 	fmt.Println("S3 session & client initialized", s3Client)
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.Run(fmt.Sprintf(":%s", cfg.SERVER_PORT))
 }
