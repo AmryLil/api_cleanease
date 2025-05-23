@@ -594,4 +594,6 @@ paths:
       summary: Create a new user
       tags:
       - users
+schemes:
+- http
 swagger: "2.0"

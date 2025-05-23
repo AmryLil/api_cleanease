@@ -908,7 +908,7 @@ var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "localhost:8001",
 	BasePath:         "/",
-	Schemes:          []string{},
+	Schemes:          []string{"http"},
 	Title:            "CleanEase API",
 	Description:      "API for CleanEase laundry management system",
 	InfoInstanceName: "swagger",
