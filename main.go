@@ -31,8 +31,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"github.com/gin-gonic/gin"
-
-	_ "api_cleanease/docs"
+	// _ "api_cleanease/docs"
 )
 
 // @title           API Documentation

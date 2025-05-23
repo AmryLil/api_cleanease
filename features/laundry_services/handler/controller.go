@@ -23,6 +23,19 @@ func New(service laundry_services.Usecase) laundry_services.Handler {
 
 var validate *validator.Validate
 
+// GetServicess godoc
+// @Summary Get all laundry services
+// @Description Get all laundry services with pagination
+// @Tags Services
+// @Accept json
+// @Produce json
+// @Param page query int false "Page number" default(1) minimum(1)
+// @Param size query int false "Page size" default(5) minimum(1)
+// @Success 200 {object} helpers.ResponseGetAllSuccess{data=[]dtos.ServicesResponse,pagination=helpers.PaginationData} "Get all services success"
+// @Failure 400 {object} helpers.ResponseError "Invalid pagination data"
+// @Failure 404 {object} helpers.ResponseError "No services found"
+// @Failure 500 {object} helpers.ResponseError "Internal server error"
+// @Router /services [get]
 func (ctl *controller) GetServicess(c *gin.Context) {
 	var pagination dtos.Pagination
 	if err := c.ShouldBindQuery(&pagination); err != nil {
@@ -59,6 +72,18 @@ func (ctl *controller) GetServicess(c *gin.Context) {
 	})
 }
 
+// ServicesDetails godoc
+// @Summary Get service details
+// @Description Get detailed information of a specific laundry service by ID
+// @Tags Services
+// @Accept json
+// @Produce json
+// @Param id path int true "Service ID" minimum(1)
+// @Success 200 {object} helpers.ResponseGetDetailSuccess{data=dtos.ServicesResponse} "Get service detail success"
+// @Failure 400 {object} helpers.ResponseError "Invalid service ID"
+// @Failure 404 {object} helpers.ResponseError "Service not found"
+// @Failure 500 {object} helpers.ResponseError "Internal server error"
+// @Router /services/{id} [get]
 func (ctl *controller) ServicesDetails(c *gin.Context) {
 	servicesID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 
@@ -85,6 +110,17 @@ func (ctl *controller) ServicesDetails(c *gin.Context) {
 	})
 }
 
+// CreateServices godoc
+// @Summary Create new laundry services
+// @Description Create one or multiple new laundry services
+// @Tags Services
+// @Accept json
+// @Produce json
+// @Param services body []dtos.InputServices true "Array of service data"
+// @Success 200 {object} helpers.ResponseCUDSuccess "Create services success"
+// @Failure 400 {object} helpers.ResponseError "Invalid request data"
+// @Failure 500 {object} helpers.ResponseError "Internal server error"
+// @Router /services [post]
 func (ctl *controller) CreateServices(c *gin.Context) {
 	var input []dtos.InputServices
 
@@ -106,6 +142,19 @@ func (ctl *controller) CreateServices(c *gin.Context) {
 	})
 }
 
+// UpdateServices godoc
+// @Summary Update laundry service
+// @Description Update an existing laundry service by ID
+// @Tags Services
+// @Accept json
+// @Produce json
+// @Param id path int true "Service ID" minimum(1)
+// @Param service body dtos.InputServices true "Updated service data"
+// @Success 200 {object} helpers.ResponseCUDSuccess "Update service success"
+// @Failure 400 {object} helpers.ResponseError "Invalid request data or validation error"
+// @Failure 404 {object} helpers.ResponseError "Service not found"
+// @Failure 500 {object} helpers.ResponseError "Internal server error"
+// @Router /services/{id} [put]
 func (ctl *controller) UpdateServices(c *gin.Context) {
 	var input dtos.InputServices
 	servicesID, err := strconv.ParseUint(c.Param("id"), 10, 64)
@@ -154,6 +203,18 @@ func (ctl *controller) UpdateServices(c *gin.Context) {
 	})
 }
 
+// DeleteServices godoc
+// @Summary Delete laundry service
+// @Description Delete an existing laundry service by ID
+// @Tags Services
+// @Accept json
+// @Produce json
+// @Param id path int true "Service ID" minimum(1)
+// @Success 200 {object} helpers.ResponseCUDSuccess "Delete service success"
+// @Failure 400 {object} helpers.ResponseError "Invalid service ID"
+// @Failure 404 {object} helpers.ResponseError "Service not found"
+// @Failure 500 {object} helpers.ResponseError "Internal server error"
+// @Router /services/{id} [delete]
 func (ctl *controller) DeleteServices(c *gin.Context) {
 	servicesID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 
