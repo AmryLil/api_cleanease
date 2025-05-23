@@ -187,7 +187,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get all laundry services with pagination
+      description: Get all laundry packages with pagination
       parameters:
       - default: 1
         description: Page number
@@ -205,7 +205,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Get all services success
+          description: Get all packages success
           schema:
             allOf:
             - $ref: '#/definitions/helpers.ResponseGetAllSuccess'
@@ -222,14 +222,14 @@ paths:
           schema:
             $ref: '#/definitions/helpers.ResponseError'
         "404":
-          description: No services found
+          description: No packages found
           schema:
             $ref: '#/definitions/helpers.ResponseError'
         "500":
           description: Internal server error
           schema:
             $ref: '#/definitions/helpers.ResponseError'
-      summary: Get all laundry services
+      summary: Get all laundry packages
       tags:
       - Laundry Packages
   /services:

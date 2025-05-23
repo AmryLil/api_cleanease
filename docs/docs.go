@@ -72,7 +72,7 @@ const docTemplate = `{
         },
         "/packages": {
             "get": {
-                "description": "Get all laundry services with pagination",
+                "description": "Get all laundry packages with pagination",
                 "consumes": [
                     "application/json"
                 ],
@@ -82,7 +82,7 @@ const docTemplate = `{
                 "tags": [
                     "Laundry Packages"
                 ],
-                "summary": "Get all laundry services",
+                "summary": "Get all laundry packages",
                 "parameters": [
                     {
                         "minimum": 1,
@@ -103,7 +103,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Get all services success",
+                        "description": "Get all packages success",
                         "schema": {
                             "allOf": [
                                 {
@@ -133,7 +133,7 @@ const docTemplate = `{
                         }
                     },
                     "404": {
-                        "description": "No services found",
+                        "description": "No packages found",
                         "schema": {
                             "$ref": "#/definitions/helpers.ResponseError"
                         }
