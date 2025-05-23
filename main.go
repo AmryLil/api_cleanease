@@ -55,7 +55,7 @@ func main() {
 	r := gin.Default()
 	cfg := config.InitConfig()
 	r.GET("/", func(ctx *gin.Context) {
-		ctx.String(http.StatusOK, "hello!😍")
+		ctx.String(http.StatusOK, "hellooo!😍")
 	})
 	routes.Orders(r, OrdersHandler())
 	routes.Packages(r, PackagesHandler())
