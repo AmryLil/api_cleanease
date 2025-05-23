@@ -37,21 +37,12 @@ jobs:
           <!DOCTYPE html>
           <html>
           <head>
-            <title>API Documentation</title>
+            <title>CleanEase API Documentation</title>
             <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui.css" />
             <style>
-              html {
-                box-sizing: border-box;
-                overflow: -moz-scrollbars-vertical;
-                overflow-y: scroll;
-              }
-              *, *:before, *:after {
-                box-sizing: inherit;
-              }
-              body {
-                margin:0;
-                background: #fafafa;
-              }
+              html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }
+              *, *:before, *:after { box-sizing: inherit; }
+              body { margin:0; background: #fafafa; }
             </style>
           </head>
           <body>
@@ -71,14 +62,20 @@ jobs:
                   plugins: [
                     SwaggerUIBundle.plugins.DownloadUrl
                   ],
-                  layout: "StandaloneLayout"
+                  layout: "StandaloneLayout",
+                  // Configure servers for different environments
+                  onComplete: function() {
+                    // Add custom servers if not defined in swagger.json
+                    if (!ui.getState().spec.servers || ui.getState().spec.servers.length === 0) {
+                      ui.preauthorizeBasic('api_key', 'username', 'password');
+                    }
+                  }
                 });
               };
             </script>
           </body>
           </html>
           EOF
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/main'

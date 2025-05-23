@@ -16,6 +16,7 @@ import (
 	su "api_cleanease/features/laundry_services/usecase"
 	"api_cleanease/features/orders"
 	"api_cleanease/helpers"
+	middlewares "api_cleanease/middleware"
 
 	oh "api_cleanease/features/orders/handler"
 	or "api_cleanease/features/orders/repository"
@@ -35,23 +36,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @title           API Documentation
-// @version         1.0
-// @description     This is a sample server.
-// @termsOfService  http://swagger.io/terms/
+// @title CleanEase API
+// @version 1.0
+// @description API for CleanEase laundry management system
+// @termsOfService http://swagger.io/terms/
 
-// @contact.name   API Support
-// @contact.url    http://www.swagger.io/support
-// @contact.email  support@swagger.io
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
 
-// @license.name  Apache 2.0
-// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+// @license.name MIT
+// @license.url https://opensource.org/licenses/MIT
 
-// @host      localhost:8001
-
-// @securityDefinitions.basic  BasicAuth
+// @host localhost:8080
+// @BasePath /
 func main() {
 	r := gin.Default()
+	middlewares.LogMiddlewares(r)
 	cfg := config.InitConfig()
 	r.GET("/", func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "hellooo!😍")
