@@ -30,7 +30,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	_ "api_cleanease/docs"
+	// _ "api_cleanease/docs"
 
 	"github.com/gin-gonic/gin"
 )

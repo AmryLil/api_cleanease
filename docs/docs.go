@@ -70,6 +70,83 @@ const docTemplate = `{
                 }
             }
         },
+        "/packages": {
+            "get": {
+                "description": "Get all laundry services with pagination",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Laundry Packages"
+                ],
+                "summary": "Get all laundry services",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "default": 5,
+                        "description": "Page size",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get all services success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/helpers.ResponseGetAllSuccess"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dtos.ResPackages"
+                                            }
+                                        },
+                                        "pagination": {
+                                            "$ref": "#/definitions/helpers.Pagination"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid pagination data",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.ResponseError"
+                        }
+                    },
+                    "404": {
+                        "description": "No services found",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.ResponseError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/services": {
             "get": {
                 "description": "Get all laundry services with pagination",

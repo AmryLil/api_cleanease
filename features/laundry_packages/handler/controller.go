@@ -31,16 +31,16 @@ func New(service laundry_packages.Usecase, uploader *s3manager.Uploader, config 
 var validate *validator.Validate
 
 // GetLaundryPackages godoc
-// @Summary Get all laundry services
-// @Description Get all laundry services with pagination
+// @Summary Get all laundry packages
+// @Description Get all laundry packages with pagination
 // @Tags Laundry Packages
 // @Accept json
 // @Produce json
 // @Param page query int false "Page number" default(1) minimum(1)
 // @Param size query int false "Page size" default(5) minimum(1)
-// @Success 200 {object} helpers.ResponseGetAllSuccess{data=[]dtos.ResPackages,pagination=helpers.Pagination} "Get all services success"
+// @Success 200 {object} helpers.ResponseGetAllSuccess{data=[]dtos.ResPackages,pagination=helpers.Pagination} "Get all packages success"
 // @Failure 400 {object} helpers.ResponseError "Invalid pagination data"
-// @Failure 404 {object} helpers.ResponseError "No services found"
+// @Failure 404 {object} helpers.ResponseError "No packages found"
 // @Failure 500 {object} helpers.ResponseError "Internal server error"
 // @Router /packages [get]
 func (ctl *controller) CreatePackages(c *gin.Context) {

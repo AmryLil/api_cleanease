@@ -183,6 +183,55 @@ paths:
       summary: User login
       tags:
       - authentication
+  /packages:
+    get:
+      consumes:
+      - application/json
+      description: Get all laundry services with pagination
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - default: 5
+        description: Page size
+        in: query
+        minimum: 1
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Get all services success
+          schema:
+            allOf:
+            - $ref: '#/definitions/helpers.ResponseGetAllSuccess'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dtos.ResPackages'
+                  type: array
+                pagination:
+                  $ref: '#/definitions/helpers.Pagination'
+              type: object
+        "400":
+          description: Invalid pagination data
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: No services found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Get all laundry services
+      tags:
+      - Laundry Packages
   /services:
     get:
       consumes:
