@@ -30,7 +30,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	// _ "api_cleanease/docs"
+	_ "api_cleanease/docs"
 
 	"github.com/gin-gonic/gin"
 )
@@ -47,8 +47,7 @@ import (
 // @license.name  Apache 2.0
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host      localhost:8080
-// @BasePath  /api/v1
+// @host      localhost:8001
 
 // @securityDefinitions.basic  BasicAuth
 func main() {
