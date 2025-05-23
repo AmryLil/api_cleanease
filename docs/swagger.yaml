@@ -1,5 +1,14 @@
 basePath: /api/v1
 definitions:
+  dtos.InputServices:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    required:
+    - name
+    type: object
   dtos.InputUser:
     properties:
       email:
@@ -31,6 +40,32 @@ definitions:
     required:
     - email
     - password
+    type: object
+  dtos.ResPackages:
+    properties:
+      cover:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price_per_kg:
+        type: number
+    type: object
+  dtos.ResServices:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      packages:
+        items:
+          $ref: '#/definitions/dtos.ResPackages'
+        type: array
     type: object
   helpers.Pagination:
     properties:
@@ -148,6 +183,197 @@ paths:
       summary: User login
       tags:
       - authentication
+  /services:
+    get:
+      consumes:
+      - application/json
+      description: Get all laundry services with pagination
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - default: 5
+        description: Page size
+        in: query
+        minimum: 1
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Get all services success
+          schema:
+            allOf:
+            - $ref: '#/definitions/helpers.ResponseGetAllSuccess'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dtos.ResServices'
+                  type: array
+                pagination:
+                  $ref: '#/definitions/helpers.Pagination'
+              type: object
+        "400":
+          description: Invalid pagination data
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: No services found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Get all laundry services
+      tags:
+      - Services
+    post:
+      consumes:
+      - application/json
+      description: Create one or multiple new laundry services
+      parameters:
+      - description: Array of service data
+        in: body
+        name: services
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/dtos.InputServices'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Create services success
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Invalid request data
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Create new laundry services
+      tags:
+      - Services
+  /services/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an existing laundry service by ID
+      parameters:
+      - description: Service ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Delete service success
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Invalid service ID
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Service not found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Delete laundry service
+      tags:
+      - Services
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information of a specific laundry service by ID
+      parameters:
+      - description: Service ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Get service detail success
+          schema:
+            allOf:
+            - $ref: '#/definitions/helpers.ResponseGetDetailSuccess'
+            - properties:
+                data:
+                  $ref: '#/definitions/dtos.ResServices'
+              type: object
+        "400":
+          description: Invalid service ID
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Service not found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Get service details
+      tags:
+      - Services
+    put:
+      consumes:
+      - application/json
+      description: Update an existing laundry service by ID
+      parameters:
+      - description: Service ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      - description: Updated service data
+        in: body
+        name: service
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.InputServices'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Update service success
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Invalid request data or validation error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Service not found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Update laundry service
+      tags:
+      - Services
   /users:
     get:
       consumes:
