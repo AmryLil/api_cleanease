@@ -30,7 +30,7 @@ func New(service laundry_packages.Usecase, uploader *s3manager.Uploader, config 
 
 var validate *validator.Validate
 
-// GetLaundryPackages godoc
+// GetPackages godoc
 // @Summary Get all laundry packages
 // @Description Get all laundry packages with pagination
 // @Tags Laundry Packages
