@@ -31,7 +31,7 @@ var validate *validator.Validate
 // @Produce json
 // @Param page query int false "Page number" default(1) minimum(1)
 // @Param size query int false "Page size" default(5) minimum(1)
-// @Success 200 {object} helpers.ResponseGetAllSuccess{data=[]dtos.ServicesResponse,pagination=helpers.PaginationData} "Get all services success"
+// @Success 200 {object} helpers.ResponseGetAllSuccess{data=[]dtos.ResServices,pagination=helpers.PaginationData} "Get all services success"
 // @Failure 400 {object} helpers.ResponseError "Invalid pagination data"
 // @Failure 404 {object} helpers.ResponseError "No services found"
 // @Failure 500 {object} helpers.ResponseError "Internal server error"
@@ -79,7 +79,7 @@ func (ctl *controller) GetServicess(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "Service ID" minimum(1)
-// @Success 200 {object} helpers.ResponseGetDetailSuccess{data=dtos.ServicesResponse} "Get service detail success"
+// @Success 200 {object} helpers.ResponseGetDetailSuccess{data=dtosResServicesServicesResponse} "Get service detail success"
 // @Failure 400 {object} helpers.ResponseError "Invalid service ID"
 // @Failure 404 {object} helpers.ResponseError "Service not found"
 // @Failure 500 {object} helpers.ResponseError "Internal server error"
