@@ -38,15 +38,26 @@ jobs:
           <html>
           <head>
             <title>CleanEase API Documentation</title>
+            <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
             <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui.css" />
             <style>
               html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }
               *, *:before, *:after { box-sizing: inherit; }
               body { margin:0; background: #fafafa; }
+              .info { padding: 20px; background: #fff3cd; border: 1px solid #ffeaa7; margin: 20px; border-radius: 5px; }
             </style>
           </head>
           <body>
+            <div class="info">
+              <h3>⚠️ Development Notice</h3>
+              <p><strong>API Server:</strong> Make sure your local API is running on <code>http://localhost:8080</code></p>
+              <p><strong>CORS:</strong> You may need to allow mixed content in your browser for HTTPS → HTTP requests</p>
+              <p><strong>Chrome:</strong> Click the shield icon in address bar → "Load unsafe scripts"</p>
+              <p><strong>Firefox:</strong> Click the shield icon → "Disable protection for now"</p>
+            </div>
+            
             <div id="swagger-ui"></div>
+            
             <script src="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui-bundle.js"></script>
             <script src="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui-standalone-preset.js"></script>
             <script>
@@ -63,12 +74,16 @@ jobs:
                     SwaggerUIBundle.plugins.DownloadUrl
                   ],
                   layout: "StandaloneLayout",
-                  // Configure servers for different environments
-                  onComplete: function() {
-                    // Add custom servers if not defined in swagger.json
-                    if (!ui.getState().spec.servers || ui.getState().spec.servers.length === 0) {
-                      ui.preauthorizeBasic('api_key', 'username', 'password');
-                    }
+                  // Force HTTP for localhost
+                  requestInterceptor: function(request) {
+                    // Log request untuk debugging
+                    console.log('Making request to:', request.url);
+                    return request;
+                  },
+                  responseInterceptor: function(response) {
+                    // Log response untuk debugging
+                    console.log('Response:', response.status, response.url);
+                    return response;
                   }
                 });
               };
