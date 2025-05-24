@@ -10,6 +10,18 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+// GetIndividualPackages godoc
+// @Summary Get all individual packages
+// @Description Get all individual packages with pagination
+// @Tags Individual Packages
+// @Accept json
+// @Produce json
+// @Param pagination body dtos.Pagination true "Pagination parameters"
+// @Success 200 {object} helpers.ResponseGetAllSuccess{data=[]dtos.ResIndividualPackages,pagination=helpers.Pagination} "Get all individual packages success"
+// @Failure 400 {object} helpers.ResponseError "Invalid pagination data"
+// @Failure 404 {object} helpers.ResponseError "No individual packages found"
+// @Failure 500 {object} helpers.ResponseError "Internal server error"
+// @Router /individual-packages [post]
 func (ctl *controller) GetIndividualPackages(c *gin.Context) {
 	var pagination dtos.Pagination
 	if err := c.ShouldBindJSON(&pagination); err != nil {
@@ -46,6 +58,18 @@ func (ctl *controller) GetIndividualPackages(c *gin.Context) {
 	})
 }
 
+// IndividualPackagesDetails godoc
+// @Summary Get individual package details
+// @Description Get detailed information of a specific individual package by ID
+// @Tags Individual Packages
+// @Accept json
+// @Produce json
+// @Param id path int true "Individual Package ID"
+// @Success 200 {object} helpers.ResponseGetDetailSuccess{data=dtos.ResIndividualPackages} "Get individual package detail success"
+// @Failure 400 {object} helpers.ResponseError "Invalid package ID"
+// @Failure 404 {object} helpers.ResponseError "Individual package not found"
+// @Failure 500 {object} helpers.ResponseError "Internal server error"
+// @Router /individual-packages/{id} [get]
 func (ctl *controller) IndividualPackagesDetails(c *gin.Context) {
 	IndividualPackagesID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 
@@ -72,6 +96,17 @@ func (ctl *controller) IndividualPackagesDetails(c *gin.Context) {
 	})
 }
 
+// CreateIndividualPackages godoc
+// @Summary Create individual packages
+// @Description Create multiple individual packages in batch
+// @Tags Individual Packages
+// @Accept json
+// @Produce json
+// @Param packages body []dtos.InputIndividualPackages true "Array of individual packages data"
+// @Success 200 {object} helpers.ResponseCUDSuccess "Create individual packages success"
+// @Failure 400 {object} helpers.ResponseError "Invalid request data"
+// @Failure 500 {object} helpers.ResponseError "Internal server error"
+// @Router /individual-packages [post]
 func (ctl *controller) CreateIndividualPackages(c *gin.Context) {
 	var input []dtos.InputIndividualPackages
 
@@ -92,6 +127,19 @@ func (ctl *controller) CreateIndividualPackages(c *gin.Context) {
 	})
 }
 
+// UpdateIndividualPackages godoc
+// @Summary Update individual package
+// @Description Update an existing individual package by ID
+// @Tags Individual Packages
+// @Accept json
+// @Produce json
+// @Param id path int true "Individual Package ID"
+// @Param package body dtos.InputIndividualPackages true "Individual package update data"
+// @Success 200 {object} helpers.ResponseCUDSuccess "Update individual package success"
+// @Failure 400 {object} helpers.ResponseError "Invalid request data or package ID"
+// @Failure 404 {object} helpers.ResponseError "Individual package not found"
+// @Failure 500 {object} helpers.ResponseError "Internal server error"
+// @Router /individual-packages/{id} [put]
 func (ctl *controller) UpdateIndividualPackages(c *gin.Context) {
 	var input dtos.InputIndividualPackages
 	IndividualPackagesID, err := strconv.ParseUint(c.Param("id"), 10, 64)
@@ -140,6 +188,18 @@ func (ctl *controller) UpdateIndividualPackages(c *gin.Context) {
 	})
 }
 
+// DeleteIndividualPackages godoc
+// @Summary Delete individual package
+// @Description Delete a specific individual package by ID
+// @Tags Individual Packages
+// @Accept json
+// @Produce json
+// @Param id path int true "Individual Package ID"
+// @Success 200 {object} helpers.ResponseCUDSuccess "Delete individual package success"
+// @Failure 400 {object} helpers.ResponseError "Invalid package ID"
+// @Failure 404 {object} helpers.ResponseError "Individual package not found"
+// @Failure 500 {object} helpers.ResponseError "Internal server error"
+// @Router /individual-packages/{id} [delete]
 func (ctl *controller) DeleteIndividualPackages(c *gin.Context) {
 	IndividualPackagesID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 

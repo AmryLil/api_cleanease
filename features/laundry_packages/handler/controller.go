@@ -30,19 +30,20 @@ func New(service laundry_packages.Usecase, uploader *s3manager.Uploader, config 
 
 var validate *validator.Validate
 
-// GetPackages godoc
-// @Summary Get all laundry packages
-// @Description Get all laundry packages with pagination
+// CreatePackages godoc
+// @Summary Create a new laundry package
+// @Description Create a new laundry package with cover image upload to S3
 // @Tags Laundry Packages
-// @Accept json
+// @Accept multipart/form-data
 // @Produce json
-// @Param page query int false "Page number" default(1) minimum(1)
-// @Param size query int false "Page size" default(5) minimum(1)
-// @Success 200 {object} helpers.ResponseGetAllSuccess{data=[]dtos.ResPackages,pagination=helpers.Pagination} "Get all packages success"
-// @Failure 400 {object} helpers.ResponseError "Invalid pagination data"
-// @Failure 404 {object} helpers.ResponseError "No packages found"
+// @Param cover formData file true "Package cover image"
+// @Param name formData string true "Package name"
+// @Param price_per_kg formData number true "Price per kilogram"
+// @Param description formData string true "Package description"
+// @Success 200 {object} helpers.ResponseCUDSuccess "Create package success"
+// @Failure 400 {object} helpers.ResponseError "Invalid request data"
 // @Failure 500 {object} helpers.ResponseError "Internal server error"
-// @Router /packages [get]
+// @Router /packages [post]
 func (ctl *controller) CreatePackages(c *gin.Context) {
 	file, err := c.FormFile("cover")
 	if err != nil {
@@ -94,6 +95,19 @@ func (ctl *controller) CreatePackages(c *gin.Context) {
 	})
 }
 
+// GetPackagess godoc
+// @Summary Get all laundry packages
+// @Description Get all laundry packages with pagination
+// @Tags Laundry Packages
+// @Accept json
+// @Produce json
+// @Param page query int false "Page number" default(1) minimum(1)
+// @Param size query int false "Page size" default(5) minimum(1)
+// @Success 200 {object} helpers.ResponseGetAllSuccess{data=[]dtos.ResPackages,pagination=helpers.Pagination} "Get all packages success"
+// @Failure 400 {object} helpers.ResponseError "Invalid pagination data"
+// @Failure 404 {object} helpers.ResponseError "No packages found"
+// @Failure 500 {object} helpers.ResponseError "Internal server error"
+// @Router /packages [get]
 func (ctl *controller) GetPackagess(c *gin.Context) {
 	var pagination dtos.Pagination
 	if err := c.ShouldBindQuery(&pagination); err != nil {
@@ -130,6 +144,18 @@ func (ctl *controller) GetPackagess(c *gin.Context) {
 	})
 }
 
+// PackagesDetails godoc
+// @Summary Get laundry package details
+// @Description Get detailed information of a specific laundry package by ID
+// @Tags Laundry Packages
+// @Accept json
+// @Produce json
+// @Param id path int true "Package ID"
+// @Success 200 {object} helpers.ResponseGetDetailSuccess{data=dtos.ResPackages} "Get package detail success"
+// @Failure 400 {object} helpers.ResponseError "Invalid package ID"
+// @Failure 404 {object} helpers.ResponseError "Package not found"
+// @Failure 500 {object} helpers.ResponseError "Internal server error"
+// @Router /packages/{id} [get]
 func (ctl *controller) PackagesDetails(c *gin.Context) {
 	packagesID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 
@@ -156,6 +182,19 @@ func (ctl *controller) PackagesDetails(c *gin.Context) {
 	})
 }
 
+// UpdatePackages godoc
+// @Summary Update laundry package
+// @Description Update an existing laundry package by ID
+// @Tags Laundry Packages
+// @Accept json
+// @Produce json
+// @Param id path int true "Package ID"
+// @Param package body dtos.InputPackages true "Package update data"
+// @Success 200 {object} helpers.ResponseCUDSuccess "Update package success"
+// @Failure 400 {object} helpers.ResponseError "Invalid request data or package ID"
+// @Failure 404 {object} helpers.ResponseError "Package not found"
+// @Failure 500 {object} helpers.ResponseError "Internal server error"
+// @Router /packages/{id} [put]
 func (ctl *controller) UpdatePackages(c *gin.Context) {
 	var input dtos.InputPackages
 	packagesID, err := strconv.ParseUint(c.Param("id"), 10, 64)
@@ -204,6 +243,18 @@ func (ctl *controller) UpdatePackages(c *gin.Context) {
 	})
 }
 
+// DeletePackages godoc
+// @Summary Delete laundry package
+// @Description Delete a specific laundry package by ID
+// @Tags Laundry Packages
+// @Accept json
+// @Produce json
+// @Param id path int true "Package ID"
+// @Success 200 {object} helpers.ResponseCUDSuccess "Delete package success"
+// @Failure 400 {object} helpers.ResponseError "Invalid package ID"
+// @Failure 404 {object} helpers.ResponseError "Package not found"
+// @Failure 500 {object} helpers.ResponseError "Internal server error"
+// @Router /packages/{id} [delete]
 func (ctl *controller) DeletePackages(c *gin.Context) {
 	packagesID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 

@@ -23,6 +23,19 @@ func New(service orders.Usecase) orders.Handler {
 
 var validate *validator.Validate
 
+// GetOrderss godoc
+// @Summary Get all orders
+// @Description Get all orders with pagination
+// @Tags Orders
+// @Accept json
+// @Produce json
+// @Param page query int false "Page number" default(1) minimum(1)
+// @Param size query int false "Page size" default(5) minimum(1)
+// @Success 200 {object} helpers.ResponseGetAllSuccess{data=[]dtos.ResOrders,pagination=helpers.Pagination} "Get all orders success"
+// @Failure 400 {object} helpers.ResponseError "Invalid pagination data"
+// @Failure 404 {object} helpers.ResponseError "No orders found"
+// @Failure 500 {object} helpers.ResponseError "Internal server error"
+// @Router /orders [get]
 func (ctl *controller) GetOrderss(c *gin.Context) {
 	var pagination dtos.Pagination
 	if err := c.ShouldBindQuery(&pagination); err != nil {
@@ -59,6 +72,18 @@ func (ctl *controller) GetOrderss(c *gin.Context) {
 	})
 }
 
+// OrdersDetails godoc
+// @Summary Get order details
+// @Description Get detailed information of a specific order by ID
+// @Tags Orders
+// @Accept json
+// @Produce json
+// @Param id path int true "Order ID"
+// @Success 200 {object} helpers.ResponseGetDetailSuccess{data=dtos.ResOrders} "Get order detail success"
+// @Failure 400 {object} helpers.ResponseError "Invalid order ID"
+// @Failure 404 {object} helpers.ResponseError "Order not found"
+// @Failure 500 {object} helpers.ResponseError "Internal server error"
+// @Router /orders/{id} [get]
 func (ctl *controller) OrdersDetails(c *gin.Context) {
 	ordersID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 
@@ -85,6 +110,17 @@ func (ctl *controller) OrdersDetails(c *gin.Context) {
 	})
 }
 
+// CreateOrders godoc
+// @Summary Create a new order
+// @Description Create a new laundry order
+// @Tags Orders
+// @Accept json
+// @Produce json
+// @Param order body dtos.InputOrders true "Order data"
+// @Success 200 {object} helpers.ResponseCUDSuccess "Create order success"
+// @Failure 400 {object} helpers.ResponseError "Invalid request data"
+// @Failure 500 {object} helpers.ResponseError "Internal server error"
+// @Router /orders [post]
 func (ctl *controller) CreateOrders(c *gin.Context) {
 	var input dtos.InputOrders
 
@@ -117,6 +153,19 @@ func (ctl *controller) CreateOrders(c *gin.Context) {
 	})
 }
 
+// UpdateOrders godoc
+// @Summary Update order
+// @Description Update an existing order by ID
+// @Tags Orders
+// @Accept json
+// @Produce json
+// @Param id path int true "Order ID"
+// @Param order body dtos.InputOrders true "Order update data"
+// @Success 200 {object} helpers.ResponseCUDSuccess "Update order success"
+// @Failure 400 {object} helpers.ResponseError "Invalid request data or order ID"
+// @Failure 404 {object} helpers.ResponseError "Order not found"
+// @Failure 500 {object} helpers.ResponseError "Internal server error"
+// @Router /orders/{id} [put]
 func (ctl *controller) UpdateOrders(c *gin.Context) {
 	var input dtos.InputOrders
 	ordersID, err := strconv.ParseUint(c.Param("id"), 10, 64)
@@ -165,6 +214,18 @@ func (ctl *controller) UpdateOrders(c *gin.Context) {
 	})
 }
 
+// DeleteOrders godoc
+// @Summary Delete order
+// @Description Delete a specific order by ID
+// @Tags Orders
+// @Accept json
+// @Produce json
+// @Param id path int true "Order ID"
+// @Success 200 {object} helpers.ResponseCUDSuccess "Delete order success"
+// @Failure 400 {object} helpers.ResponseError "Invalid order ID"
+// @Failure 404 {object} helpers.ResponseError "Order not found"
+// @Failure 500 {object} helpers.ResponseError "Internal server error"
+// @Router /orders/{id} [delete]
 func (ctl *controller) DeleteOrders(c *gin.Context) {
 	ordersID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 
