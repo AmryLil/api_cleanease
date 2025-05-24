@@ -2,7 +2,6 @@ package middlewares
 
 import (
 	"fmt"
-	"net/http"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -12,10 +11,11 @@ import (
 func LogMiddlewares(r *gin.Engine) {
 	// CORS middleware
 	r.Use(cors.New(cors.Config{
-		AllowAllOrigins:  true,
-		AllowHeaders:     []string{"Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin", "X-Custom-Header"},
-		AllowMethods:     []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete, http.MethodPatch},
+		AllowOrigins:     []string{"http://localhost:*", "https://localhost:*", "*"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization", "Accept", "X-Requested-With"},
 		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
 	}))
 
 	// Logger middleware
