@@ -1,39 +1,35 @@
 package orders
 
 import (
-	"api_cleanease/features/auth"
-	"time"
-
 	"gorm.io/gorm"
 )
 
 type Orders struct {
 	gorm.Model
-	CustomerID uint      `gorm:"not null"`
-	Customer   auth.User `gorm:"foreignKey:CustomerID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-
-	TotalPrice    float64 `gorm:"not null"`
-	Status        string  `gorm:"type:varchar(50);default:'pending'"`
-	PickupDate    time.Time
-	DeliveryDate  *time.Time    `gorm:"default:null"`
-	PaymentMethod string        `gorm:"type:varchar(50);default:null"`
-	OrderDetails  []OrderDetail `gorm:"foreignKey:OrderID"`
+	UserID     uint
+	ServiceID  uint
+	PackageID  uint
+	IsPickup   bool    // true = dijemput kurir, false = antar langsung
+	Weight     float64 // Hanya diisi jika IsIndividual == false
+	TotalPrice float64
+	Status     string `gorm:"type:varchar(50)"`
+	Address    string
+	Notes      string
+	OrderItems []OrderItem `gorm:"foreignKey:OrderID"`
 }
 
 func (Orders) TableName() string {
 	return "orders"
 }
 
-type OrderDetail struct {
-	ID         uint    `gorm:"primaryKey"`
-	OrderID    uint    `gorm:"not null"`
-	ServiceID  uint    `gorm:"not null"`
-	PackageID  uint    `gorm:"not null"`
-	Quantity   int     `gorm:"not null"`
-	Price      float64 `gorm:"not null"`
-	TotalPrice float64 `gorm:"not null"`
+type OrderItem struct {
+	gorm.Model
+	OrderID             uint
+	IndividualPackageID uint
+	Qty                 int
+	SubTotal            float64 // Qty * Price
 }
 
-func (OrderDetail) TableName() string {
-	return "order_details"
+func (OrderItem) TableName() string {
+	return "order_item"
 }

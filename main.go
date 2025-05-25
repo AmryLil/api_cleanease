@@ -2,6 +2,7 @@ package main
 
 import (
 	"api_cleanease/config"
+	"api_cleanease/database/seeders"
 	"api_cleanease/features/auth"
 	ah "api_cleanease/features/auth/handler"
 	ar "api_cleanease/features/auth/repository"
@@ -63,6 +64,10 @@ func main() {
 	routes.Services(r, ServicesHandler())
 	routes.Users(r, AuthHandler())
 
+	// seeder
+	db := utils.InitDB()
+	seeders.SeedAll(db)
+
 	sess, err := utils.NewSession()
 	if err != nil {
 		fmt.Println("Failed to create AWS session:", err)
@@ -118,7 +123,7 @@ func AuthHandler() auth.Handler {
 func OrdersHandler() orders.Handler {
 	db := utils.InitDB()
 	db.AutoMigrate(orders.Orders{})
-	db.AutoMigrate(orders.OrderDetail{})
+	db.AutoMigrate(orders.OrderItem{})
 	repo := or.New(db)
 	usecase := ou.New(repo)
 	return oh.New(usecase)
