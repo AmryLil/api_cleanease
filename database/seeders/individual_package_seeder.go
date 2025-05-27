@@ -15,10 +15,17 @@ func SeedIndividualPackages(db *gorm.DB) {
 		return
 	}
 
+	// Ambil satu package dulu, misal yang "Reguler"
+	var pkg laundry_packages.Packages
+	if err := db.First(&pkg, "name = ?", "Reguler").Error; err != nil {
+		fmt.Println("❌ Gagal cari package Reguler:", err)
+		return
+	}
+
 	items := []laundry_packages.IndividualPackages{
-		{Name: "Cuci Sepatu", Price: 20000},
-		{Name: "Cuci Tas", Price: 25000},
-		{Name: "Cuci Helm", Price: 15000},
+		{Name: "Cuci Sepatu", Price: 20000, PackageID: pkg.ID},
+		{Name: "Cuci Tas", Price: 25000, PackageID: pkg.ID},
+		{Name: "Cuci Helm", Price: 15000, PackageID: pkg.ID},
 	}
 
 	if err := db.Create(&items).Error; err != nil {

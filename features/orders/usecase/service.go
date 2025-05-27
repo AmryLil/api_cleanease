@@ -69,8 +69,33 @@ func (svc *service) Create(newOrders dtos.InputOrders) error {
 	err := smapping.FillStruct(&orders, smapping.MapFields(newOrders))
 	if err != nil {
 		log.Error(err.Error())
-		return nil
+		return err
 	}
+
+	var packagePrice float64
+	if orders.PackageID != 0 {
+		data, err := svc.model.SelectLaundryPackageByID(orders.PackageID)
+
+		if err != nil {
+			log.Error(err.Error())
+			return err
+
+		}
+		packagePrice = data.PricePerKg * orders.Weight
+	}
+
+	var itemsTotal float64
+
+	for i := range orders.OrderItems {
+		data, err := svc.model.SelectLaundryIndividualPackageByID(orders.OrderItems[i].IndividualPackageID)
+		if err != nil {
+			log.Error(err.Error())
+			return err
+		}
+		orders.OrderItems[i].SubTotal = float64(orders.OrderItems[i].Qty) * data.Price
+		itemsTotal += orders.OrderItems[i].SubTotal
+	}
+	orders.TotalPrice = packagePrice + itemsTotal
 
 	orders.ID = helpers.GenerateID()
 	err = svc.model.Insert(orders)

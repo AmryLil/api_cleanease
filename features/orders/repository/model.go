@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"api_cleanease/features/laundry_packages"
+	"api_cleanease/features/laundry_services"
 	"api_cleanease/features/orders"
 
 	"github.com/labstack/gommon/log"
@@ -80,4 +82,40 @@ func (mdl *model) DeleteByID(ordersID uint) error {
 	}
 
 	return nil
+}
+
+func (mdl *model) SelectLaundryPackageByID(packageID uint) (*laundry_packages.Packages, error) {
+	var laundry_packages laundry_packages.Packages
+	err := mdl.db.First(&laundry_packages, packageID).Error
+
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+
+	return &laundry_packages, nil
+}
+
+func (mdl *model) SelectLaundryIndividualPackageByID(individualPackageID uint) (*laundry_packages.IndividualPackages, error) {
+	var laundry_packages_item laundry_packages.IndividualPackages
+	err := mdl.db.First(&laundry_packages_item, individualPackageID).Error
+
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+
+	return &laundry_packages_item, nil
+}
+
+func (mdl *model) SelectLaundryServiceByID(packageID uint) (*laundry_services.Services, error) {
+	var laundry_services laundry_services.Services
+	err := mdl.db.First(&laundry_services, packageID).Error
+
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+
+	return &laundry_services, nil
 }

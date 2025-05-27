@@ -92,6 +92,7 @@ func ServicesHandler() laundry_services.Handler {
 func PackagesHandler() laundry_packages.Handler {
 	db := utils.InitDB()
 	db.AutoMigrate(laundry_packages.Packages{})
+	db.AutoMigrate(laundry_packages.IndividualPackages{})
 
 	sess, _ := utils.NewSession()
 

@@ -20,9 +20,11 @@ func (Packages) TableName() string {
 
 type IndividualPackages struct {
 	gorm.Model
-	Name  string  `gorm:"type:varchar(255);not null"`
-	Price float64 `gorm:"type:decimal(10,2);not null"`
-	Cover string  `gorm:"type:varchar(255)"`
+
+	Name      string  `gorm:"type:varchar(255);not null"`
+	Price     float64 `gorm:"type:decimal(10,2);not null"`
+	Cover     string  `gorm:"type:varchar(255)"`
+	PackageID uint
 }
 
 func (IndividualPackages) TableName() string {

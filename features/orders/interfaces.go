@@ -1,6 +1,8 @@
 package orders
 
 import (
+	"api_cleanease/features/laundry_packages"
+	"api_cleanease/features/laundry_services"
 	"api_cleanease/features/orders/dtos"
 
 	"github.com/gin-gonic/gin"
@@ -12,6 +14,11 @@ type Repository interface {
 	SelectByID(ordersID uint) (*Orders, error)
 	Update(orders Orders) error
 	DeleteByID(ordersID uint) error
+
+	// extend
+	SelectLaundryServiceByID(serviceID uint) (*laundry_services.Services, error)
+	SelectLaundryPackageByID(packageID uint) (*laundry_packages.Packages, error)
+	SelectLaundryIndividualPackageByID(individualPackageID uint) (*laundry_packages.IndividualPackages, error)
 }
 
 type Usecase interface {
