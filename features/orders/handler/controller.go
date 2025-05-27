@@ -141,6 +141,13 @@ func (ctl *controller) CreateOrders(c *gin.Context) {
 		return
 	}
 
+	userID, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(401, gin.H{"error": "Unauthorized"})
+		return
+	}
+	input.UserID = uint(userID.(int))
+
 	err = ctl.service.Create(input)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, helpers.BuildErrorResponse(err.Error()))
