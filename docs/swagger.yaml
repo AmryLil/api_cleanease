@@ -21,10 +21,29 @@ definitions:
     type: object
   dtos.InputOrders:
     properties:
-      name:
+      address:
         type: string
+      is_pickup:
+        type: boolean
+      notes:
+        type: string
+      order_items:
+        items:
+          $ref: '#/definitions/dtos.OrderItemCreateInput'
+        type: array
+      package_id:
+        type: integer
+      service_id:
+        type: integer
+      user_id:
+        type: integer
+      weight:
+        description: Optional jika bukan per kg
+        type: number
     required:
-    - name
+    - package_id
+    - service_id
+    - user_id
     type: object
   dtos.InputPackages:
     properties:
@@ -80,6 +99,28 @@ definitions:
     - email
     - password
     type: object
+  dtos.OrderItemCreateInput:
+    properties:
+      individual_package_id:
+        type: integer
+      qty:
+        minimum: 1
+        type: integer
+    required:
+    - individual_package_id
+    - qty
+    type: object
+  dtos.OrderItemResponse:
+    properties:
+      id:
+        type: integer
+      individual_package_id:
+        type: integer
+      qty:
+        type: integer
+      sub_total:
+        type: number
+    type: object
   dtos.ResIndividualPackages:
     properties:
       cover:
@@ -93,8 +134,32 @@ definitions:
     type: object
   dtos.ResOrders:
     properties:
-      name:
+      address:
         type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      is_pickup:
+        type: boolean
+      notes:
+        type: string
+      order_items:
+        items:
+          $ref: '#/definitions/dtos.OrderItemResponse'
+        type: array
+      package_id:
+        type: integer
+      service_id:
+        type: integer
+      status:
+        type: string
+      total_price:
+        type: number
+      user_id:
+        type: integer
+      weight:
+        type: number
     type: object
   dtos.ResPackages:
     properties:
@@ -208,6 +273,106 @@ info:
   title: CleanEase API
   version: "1.0"
 paths:
+  /auth:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a paginated list of all users in the system
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 5
+        description: Items per page
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.ResponseGetAllSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Get all users with pagination
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Create a new user with the provided information
+      parameters:
+      - description: User information
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.InputUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Create a new user
+      tags:
+      - authentication
+  /auth/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve detailed information about a specific user by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.ResponseGetDetailSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Get user by ID
+      tags:
+      - users
   /auth/login:
     post:
       consumes:
@@ -955,44 +1120,6 @@ paths:
       summary: Update laundry service
       tags:
       - Services
-  /users:
-    get:
-      consumes:
-      - application/json
-      description: Retrieve a paginated list of all users in the system
-      parameters:
-      - default: 1
-        description: Page number
-        in: query
-        name: page
-        type: integer
-      - default: 5
-        description: Items per page
-        in: query
-        name: page_size
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/helpers.ResponseGetAllSuccess'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/helpers.ResponseError'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/helpers.ResponseError'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/helpers.ResponseError'
-      summary: Get all users with pagination
-      tags:
-      - users
   /users/{id}:
     delete:
       consumes:
@@ -1024,38 +1151,6 @@ paths:
           schema:
             $ref: '#/definitions/helpers.ResponseError'
       summary: Delete a user
-      tags:
-      - users
-    get:
-      consumes:
-      - application/json
-      description: Retrieve detailed information about a specific user by their ID
-      parameters:
-      - description: User ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/helpers.ResponseGetDetailSuccess'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/helpers.ResponseError'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/helpers.ResponseError'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/helpers.ResponseError'
-      summary: Get user by ID
       tags:
       - users
     put:
@@ -1094,36 +1189,6 @@ paths:
           schema:
             $ref: '#/definitions/helpers.ResponseError'
       summary: Update an existing user
-      tags:
-      - users
-  /users/create:
-    post:
-      consumes:
-      - application/json
-      description: Create a new user with the provided information
-      parameters:
-      - description: User information
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/dtos.InputUser'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/helpers.ResponseCUDSuccess'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/helpers.ResponseError'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/helpers.ResponseError'
-      summary: Create a new user
       tags:
       - users
 schemes:

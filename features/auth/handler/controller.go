@@ -35,7 +35,7 @@ var validate *validator.Validate
 // @Failure      400       {object}  helpers.ResponseError
 // @Failure      404       {object}  helpers.ResponseError
 // @Failure      500       {object}  helpers.ResponseError
-// @Router       /users [get]
+// @Router       /auth [get]
 func (ctl *controller) GetUsers(c *gin.Context) {
 	var pagination dtos.Pagination
 	if err := c.ShouldBindJSON(&pagination); err != nil {
@@ -83,7 +83,7 @@ func (ctl *controller) GetUsers(c *gin.Context) {
 // @Failure      400  {object}  helpers.ResponseError
 // @Failure      404  {object}  helpers.ResponseError
 // @Failure      500  {object}  helpers.ResponseError
-// @Router       /users/{id} [get]
+// @Router       /auth/{id} [get]
 func (ctl *controller) UserDetails(c *gin.Context) {
 	userID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 
@@ -113,14 +113,14 @@ func (ctl *controller) UserDetails(c *gin.Context) {
 // CreateUser godoc
 // @Summary      Create a new user
 // @Description  Create a new user with the provided information
-// @Tags         users
+// @Tags         authentication
 // @Accept       json
 // @Produce      json
 // @Param        user  body      dtos.InputUser  true  "User information"
 // @Success      200   {object}  helpers.ResponseCUDSuccess
 // @Failure      400   {object}  helpers.ResponseError
 // @Failure      500   {object}  helpers.ResponseError
-// @Router       /users/create [post]
+// @Router       /auth [post]
 func (ctl *controller) CreateUser(c *gin.Context) {
 	var input dtos.InputUser
 
