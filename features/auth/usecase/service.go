@@ -114,7 +114,7 @@ func (svc *service) Login(user dtos.LoginRequest) (*dtos.ResUser, error) {
 
 	resUser := dtos.ResUser{}
 	userType := strconv.Itoa(userData.UserType)
-	tokenData := svc.jwt.GenerateJWT(string(userData.ID), userType)
+	tokenData := svc.jwt.GenerateJWT(strconv.FormatUint(uint64(userData.ID), 10), userType)
 	resUser.AccessToken = tokenData["access_token"].(string)
 	resUser.UserType = userType
 	resUser.Name = userData.Name

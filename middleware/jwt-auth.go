@@ -9,7 +9,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 )
 
 func AuthorizeJWT(jwtService helpers.JWTInterface, role int, secret string) gin.HandlerFunc {
@@ -43,24 +42,7 @@ func AuthorizeJWT(jwtService helpers.JWTInterface, role int, secret string) gin.
 				c.Abort()
 				return
 			}
-			userID, err := uuid.Parse(userIDStr)
-			if err != nil {
-				c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid UUID format"})
-				c.Abort()
-				return
-			}
-			personIDStr, ok := claims["person_id"].(string)
-			if !ok {
-				c.JSON(http.StatusUnauthorized, gin.H{"error": "person_id is missing or not a string"})
-				c.Abort()
-				return
-			}
-			personID, err := uuid.Parse(personIDStr)
-			if err != nil {
-				c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid UUID format"})
-				c.Abort()
-				return
-			}
+
 			userTypeStr, ok := claims["user_type"].(string)
 			if !ok {
 				c.JSON(http.StatusUnauthorized, gin.H{"error": "user_type is missing or not a string"})
@@ -74,10 +56,9 @@ func AuthorizeJWT(jwtService helpers.JWTInterface, role int, secret string) gin.
 				return
 			}
 
-			c.Set("user_id", userID)
-			c.Set("person_id", personID)
+			c.Set("user_id", userIDStr)
 			c.Set("user_type", userType)
-			log.Println("User ID set in context:", userID)
+			log.Println("User ID set in context:", userIDStr)
 			log.Println("user type set in context:", userType)
 
 			if role == 0 || role == -1 || userType == 3 || (userType == 1 || userType == 2) {
