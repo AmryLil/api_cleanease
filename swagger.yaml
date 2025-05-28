@@ -1,0 +1,1212 @@
+basePath: /
+definitions:
+  api_cleanease_features_laundry_packages_dtos.Pagination:
+    properties:
+      page:
+        type: integer
+      size:
+        type: integer
+    type: object
+  dtos.InputIndividualPackages:
+    properties:
+      cover:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+    required:
+    - name
+    - price
+    type: object
+  dtos.InputOrders:
+    properties:
+      address:
+        type: string
+      is_pickup:
+        type: boolean
+      notes:
+        type: string
+      order_items:
+        items:
+          $ref: '#/definitions/dtos.OrderItemCreateInput'
+        type: array
+      package_id:
+        type: integer
+      service_id:
+        type: integer
+      user_id:
+        type: integer
+      weight:
+        description: Optional jika bukan per kg
+        type: number
+    required:
+    - package_id
+    - service_id
+    type: object
+  dtos.InputPackages:
+    properties:
+      cover:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      price_per_kg:
+        type: number
+    required:
+    - name
+    type: object
+  dtos.InputServices:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  dtos.InputUser:
+    properties:
+      email:
+        example: john@example.com
+        type: string
+      name:
+        example: John Doe
+        type: string
+      password:
+        example: password123
+        minLength: 6
+        type: string
+      user_type:
+        example: 1
+        type: integer
+    required:
+    - email
+    - name
+    - password
+    type: object
+  dtos.LoginRequest:
+    properties:
+      email:
+        example: john@example.com
+        type: string
+      password:
+        example: password123
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  dtos.OrderItemCreateInput:
+    properties:
+      individual_package_id:
+        type: integer
+      qty:
+        minimum: 1
+        type: integer
+    required:
+    - individual_package_id
+    - qty
+    type: object
+  dtos.OrderItemResponse:
+    properties:
+      id:
+        type: integer
+      individual_package_id:
+        type: integer
+      qty:
+        type: integer
+      sub_total:
+        type: number
+    type: object
+  dtos.ResIndividualPackages:
+    properties:
+      cover:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price_per_kg:
+        type: number
+    type: object
+  dtos.ResOrders:
+    properties:
+      address:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      is_pickup:
+        type: boolean
+      notes:
+        type: string
+      order_items:
+        items:
+          $ref: '#/definitions/dtos.OrderItemResponse'
+        type: array
+      package_id:
+        type: integer
+      service_id:
+        type: integer
+      status:
+        type: string
+      total_price:
+        type: number
+      user_id:
+        type: integer
+      weight:
+        type: number
+    type: object
+  dtos.ResPackages:
+    properties:
+      cover:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price_per_kg:
+        type: number
+    type: object
+  dtos.ResServices:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      packages:
+        items:
+          $ref: '#/definitions/dtos.ResPackages'
+        type: array
+    type: object
+  helpers.Pagination:
+    properties:
+      current_page:
+        example: 1
+        type: integer
+      next_page:
+        example: 2
+        type: integer
+      page_size:
+        example: 5
+        type: integer
+      previous_page:
+        example: 0
+        type: integer
+      total_data:
+        example: 50
+        type: integer
+      total_page:
+        example: 10
+        type: integer
+    type: object
+  helpers.ResponseAuth:
+    properties:
+      data: {}
+      message:
+        example: error message
+        type: string
+      status:
+        example: false
+        type: boolean
+    type: object
+  helpers.ResponseCUDSuccess:
+    properties:
+      message:
+        example: Success
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  helpers.ResponseError:
+    properties:
+      data: {}
+      message:
+        example: Error message
+        type: string
+      status:
+        example: false
+        type: boolean
+    type: object
+  helpers.ResponseGetAllSuccess:
+    properties:
+      data: {}
+      message:
+        example: success message
+        type: string
+      pagination:
+        $ref: '#/definitions/helpers.Pagination'
+      status:
+        example: true
+        type: boolean
+    type: object
+  helpers.ResponseGetDetailSuccess:
+    properties:
+      data: {}
+      message:
+        example: success message
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+host: localhost:8001
+info:
+  contact:
+    email: support@cleanease.com
+    name: API Support
+    url: http://www.swagger.io/support
+  description: API Documentation for Cleanease Laundry Management System
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://swagger.io/terms/
+  title: CLEANEASE API
+  version: "2.0"
+paths:
+  /auth:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a paginated list of all users in the system
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 5
+        description: Items per page
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.ResponseGetAllSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Get all users with pagination
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Create a new user with the provided information
+      parameters:
+      - description: User information
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.InputUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Create a new user
+      tags:
+      - authentication
+  /auth/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve detailed information about a specific user by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.ResponseGetDetailSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Get user by ID
+      tags:
+      - users
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user with email/username and password
+      parameters:
+      - description: Login credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.ResponseAuth'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: User login
+      tags:
+      - authentication
+  /individual-packages:
+    post:
+      consumes:
+      - application/json
+      description: Create multiple individual packages in batch
+      parameters:
+      - description: Array of individual packages data
+        in: body
+        name: packages
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/dtos.InputIndividualPackages'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Create individual packages success
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Invalid request data
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Create individual packages
+      tags:
+      - Individual Packages
+  /individual-packages/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a specific individual package by ID
+      parameters:
+      - description: Individual Package ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Delete individual package success
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Invalid package ID
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Individual package not found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Delete individual package
+      tags:
+      - Individual Packages
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information of a specific individual package by ID
+      parameters:
+      - description: Individual Package ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Get individual package detail success
+          schema:
+            allOf:
+            - $ref: '#/definitions/helpers.ResponseGetDetailSuccess'
+            - properties:
+                data:
+                  $ref: '#/definitions/dtos.ResIndividualPackages'
+              type: object
+        "400":
+          description: Invalid package ID
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Individual package not found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Get individual package details
+      tags:
+      - Individual Packages
+    put:
+      consumes:
+      - application/json
+      description: Update an existing individual package by ID
+      parameters:
+      - description: Individual Package ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Individual package update data
+        in: body
+        name: package
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.InputIndividualPackages'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Update individual package success
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Invalid request data or package ID
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Individual package not found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Update individual package
+      tags:
+      - Individual Packages
+  /orders:
+    get:
+      consumes:
+      - application/json
+      description: Get all orders with pagination
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - default: 5
+        description: Page size
+        in: query
+        minimum: 1
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Get all orders success
+          schema:
+            allOf:
+            - $ref: '#/definitions/helpers.ResponseGetAllSuccess'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dtos.ResOrders'
+                  type: array
+                pagination:
+                  $ref: '#/definitions/helpers.Pagination'
+              type: object
+        "400":
+          description: Invalid pagination data
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: No orders found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      security:
+      - Bearer: []
+      summary: Get all orders
+      tags:
+      - Orders
+    post:
+      consumes:
+      - application/json
+      description: Create a new laundry order
+      parameters:
+      - description: Order data
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.InputOrders'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Create order success
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Invalid request data
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      security:
+      - Bearer: []
+      summary: Create a new order
+      tags:
+      - Orders
+  /orders/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a specific order by ID
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Delete order success
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Invalid order ID
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Order not found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      security:
+      - Bearer: []
+      summary: Delete order
+      tags:
+      - Orders
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information of a specific order by ID
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Get order detail success
+          schema:
+            allOf:
+            - $ref: '#/definitions/helpers.ResponseGetDetailSuccess'
+            - properties:
+                data:
+                  $ref: '#/definitions/dtos.ResOrders'
+              type: object
+        "400":
+          description: Invalid order ID
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Order not found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      security:
+      - Bearer: []
+      summary: Get order details
+      tags:
+      - Orders
+    put:
+      consumes:
+      - application/json
+      description: Update an existing order by ID
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Order update data
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.InputOrders'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Update order success
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Invalid request data or order ID
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Order not found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      security:
+      - Bearer: []
+      summary: Update order
+      tags:
+      - Orders
+  /packages:
+    get:
+      consumes:
+      - application/json
+      description: Get all laundry packages with pagination
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - default: 5
+        description: Page size
+        in: query
+        minimum: 1
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Get all packages success
+          schema:
+            allOf:
+            - $ref: '#/definitions/helpers.ResponseGetAllSuccess'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dtos.ResPackages'
+                  type: array
+                pagination:
+                  $ref: '#/definitions/helpers.Pagination'
+              type: object
+        "400":
+          description: Invalid pagination data
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: No packages found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Get all laundry packages
+      tags:
+      - Laundry Packages
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create a new laundry package with cover image upload to S3
+      parameters:
+      - description: Package cover image
+        in: formData
+        name: cover
+        required: true
+        type: file
+      - description: Package name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Price per kilogram
+        in: formData
+        name: price_per_kg
+        required: true
+        type: number
+      - description: Package description
+        in: formData
+        name: description
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Create package success
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Invalid request data
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Create a new laundry package
+      tags:
+      - Laundry Packages
+  /packages/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a specific laundry package by ID
+      parameters:
+      - description: Package ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Delete package success
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Invalid package ID
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Package not found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Delete laundry package
+      tags:
+      - Laundry Packages
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information of a specific laundry package by ID
+      parameters:
+      - description: Package ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Get package detail success
+          schema:
+            allOf:
+            - $ref: '#/definitions/helpers.ResponseGetDetailSuccess'
+            - properties:
+                data:
+                  $ref: '#/definitions/dtos.ResPackages'
+              type: object
+        "400":
+          description: Invalid package ID
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Package not found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Get laundry package details
+      tags:
+      - Laundry Packages
+    put:
+      consumes:
+      - application/json
+      description: Update an existing laundry package by ID
+      parameters:
+      - description: Package ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Package update data
+        in: body
+        name: package
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.InputPackages'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Update package success
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Invalid request data or package ID
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Package not found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Update laundry package
+      tags:
+      - Laundry Packages
+  /services:
+    get:
+      consumes:
+      - application/json
+      description: Get all laundry services with pagination
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - default: 5
+        description: Page size
+        in: query
+        minimum: 1
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Get all services success
+          schema:
+            allOf:
+            - $ref: '#/definitions/helpers.ResponseGetAllSuccess'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dtos.ResServices'
+                  type: array
+                pagination:
+                  $ref: '#/definitions/helpers.Pagination'
+              type: object
+        "400":
+          description: Invalid pagination data
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: No services found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Get all laundry services
+      tags:
+      - Services
+    post:
+      consumes:
+      - application/json
+      description: Create one or multiple new laundry services
+      parameters:
+      - description: Array of service data
+        in: body
+        name: services
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/dtos.InputServices'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Create services success
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Invalid request data
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Create new laundry services
+      tags:
+      - Services
+  /services/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an existing laundry service by ID
+      parameters:
+      - description: Service ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Delete service success
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Invalid service ID
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Service not found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Delete laundry service
+      tags:
+      - Services
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information of a specific laundry service by ID
+      parameters:
+      - description: Service ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Get service detail success
+          schema:
+            allOf:
+            - $ref: '#/definitions/helpers.ResponseGetDetailSuccess'
+            - properties:
+                data:
+                  $ref: '#/definitions/dtos.ResServices'
+              type: object
+        "400":
+          description: Invalid service ID
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Service not found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Get service details
+      tags:
+      - Services
+    put:
+      consumes:
+      - application/json
+      description: Update an existing laundry service by ID
+      parameters:
+      - description: Service ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      - description: Updated service data
+        in: body
+        name: service
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.InputServices'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Update service success
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Invalid request data or validation error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Service not found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Update laundry service
+      tags:
+      - Services
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Delete a user
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Update user information by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated user information
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.InputUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.ResponseCUDSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helpers.ResponseError'
+      summary: Update an existing user
+      tags:
+      - users
+schemes:
+- http
+- https
+securityDefinitions:
+  Bearer:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
