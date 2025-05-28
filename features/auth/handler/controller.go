@@ -110,7 +110,7 @@ func (ctl *controller) UserDetails(c *gin.Context) {
 	})
 }
 
-// CreateUser godoc
+// Register godoc
 // @Summary      Create a new user
 // @Description  Create a new user with the provided information
 // @Tags         authentication

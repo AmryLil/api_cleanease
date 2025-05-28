@@ -19,7 +19,6 @@ type RegisterRequest struct {
 	Name     string `json:"name" binding:"required" example:"John Doe"`
 	Email    string `json:"email" binding:"required,email" example:"john@example.com"`
 	Password string `json:"password" binding:"required,min=6" example:"password123"`
-	UserType int    `json:"user_type" example:"1"`
 }
 
 // LoginRequest represents login credentials
