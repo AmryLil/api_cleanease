@@ -9,7 +9,16 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@cleanease.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -1808,6 +1817,7 @@ const docTemplate = `{
     },
     "securityDefinitions": {
         "Bearer": {
+            "description": "Type \"Bearer\" followed by a space and JWT token.",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"
@@ -1818,11 +1828,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "2.0",
-	Host:             "",
-	BasePath:         "",
-	Schemes:          []string{},
-	Title:            "Example API",
-	Description:      "API Documentation for Cleanease",
+	Host:             "localhost:8001",
+	BasePath:         "/",
+	Schemes:          []string{"http", "https"},
+	Title:            "CLEANEASE API",
+	Description:      "API Documentation for Cleanease Laundry Management System",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
