@@ -1,7 +1,4 @@
 {
-    "schemes": [
-        "http"
-    ],
     "swagger": "2.0",
     "info": {
         "description": "API for CleanEase laundry management system",
@@ -12,14 +9,8 @@
             "url": "http://www.swagger.io/support",
             "email": "support@swagger.io"
         },
-        "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
-        },
-        "version": "1.0"
+        "version": "2.0"
     },
-    "host": "localhost:8001",
-    "basePath": "/",
     "paths": {
         "/auth": {
             "get": {

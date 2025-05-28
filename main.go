@@ -38,24 +38,20 @@ import (
 )
 
 // @title CleanEase API
-// @version 1.0
+// @version 2.0
 // @description API for CleanEase laundry management system
 // @termsOfService http://swagger.io/terms/
-
 // @contact.name API Support
 // @contact.url http://www.swagger.io/support
 // @contact.email support@swagger.io
-
 // @securityDefinitions.apikey  Bearer
 // @in               header
 // @name             Authorization
-
 // @license.name MIT
 // @license.url https://opensource.org/licenses/MIT
-
 // @host localhost:8001
 // @BasePath /
-// @schemes http
+// @schemes http httpsS
 func main() {
 	r := gin.Default()
 
