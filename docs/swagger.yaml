@@ -588,6 +588,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/helpers.ResponseError'
+      security:
+      - Bearer: []
       summary: Get all orders
       tags:
       - Orders
@@ -617,6 +619,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/helpers.ResponseError'
+      security:
+      - Bearer: []
       summary: Create a new order
       tags:
       - Orders
@@ -650,6 +654,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/helpers.ResponseError'
+      security:
+      - Bearer: []
       summary: Delete order
       tags:
       - Orders
@@ -687,6 +693,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/helpers.ResponseError'
+      security:
+      - Bearer: []
       summary: Get order details
       tags:
       - Orders
@@ -725,6 +733,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/helpers.ResponseError'
+      security:
+      - Bearer: []
       summary: Update order
       tags:
       - Orders

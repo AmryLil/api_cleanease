@@ -29,6 +29,7 @@ var validate *validator.Validate
 // @Tags Orders
 // @Accept json
 // @Produce json
+// @Security Bearer
 // @Param page query int false "Page number" default(1) minimum(1)
 // @Param size query int false "Page size" default(5) minimum(1)
 // @Success 200 {object} helpers.ResponseGetAllSuccess{data=[]dtos.ResOrders,pagination=helpers.Pagination} "Get all orders success"
@@ -78,6 +79,7 @@ func (ctl *controller) GetOrderss(c *gin.Context) {
 // @Tags Orders
 // @Accept json
 // @Produce json
+// @Security Bearer
 // @Param id path int true "Order ID"
 // @Success 200 {object} helpers.ResponseGetDetailSuccess{data=dtos.ResOrders} "Get order detail success"
 // @Failure 400 {object} helpers.ResponseError "Invalid order ID"
@@ -116,6 +118,7 @@ func (ctl *controller) OrdersDetails(c *gin.Context) {
 // @Tags Orders
 // @Accept json
 // @Produce json
+// @Security Bearer
 // @Param order body dtos.InputOrders true "Order data"
 // @Success 200 {object} helpers.ResponseCUDSuccess "Create order success"
 // @Failure 400 {object} helpers.ResponseError "Invalid request data"
@@ -166,6 +169,7 @@ func (ctl *controller) CreateOrders(c *gin.Context) {
 // @Tags Orders
 // @Accept json
 // @Produce json
+// @Security Bearer
 // @Param id path int true "Order ID"
 // @Param order body dtos.InputOrders true "Order update data"
 // @Success 200 {object} helpers.ResponseCUDSuccess "Update order success"
@@ -227,6 +231,7 @@ func (ctl *controller) UpdateOrders(c *gin.Context) {
 // @Tags Orders
 // @Accept json
 // @Produce json
+// @Security Bearer
 // @Param id path int true "Order ID"
 // @Success 200 {object} helpers.ResponseCUDSuccess "Delete order success"
 // @Failure 400 {object} helpers.ResponseError "Invalid order ID"

@@ -439,6 +439,11 @@ const docTemplate = `{
         },
         "/orders": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Get all orders with pagination",
                 "consumes": [
                     "application/json"
@@ -514,6 +519,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Create a new laundry order",
                 "consumes": [
                     "application/json"
@@ -560,6 +570,11 @@ const docTemplate = `{
         },
         "/orders/{id}": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Get detailed information of a specific order by ID",
                 "consumes": [
                     "application/json"
@@ -620,6 +635,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Update an existing order by ID",
                 "consumes": [
                     "application/json"
@@ -677,6 +697,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a specific order by ID",
                 "consumes": [
                     "application/json"
