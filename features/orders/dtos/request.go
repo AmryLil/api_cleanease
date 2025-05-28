@@ -1,7 +1,7 @@
 package dtos
 
 type InputOrders struct {
-	UserID     uint                   `json:"user_id" binding:"required"`
+	UserID     uint                   `json:"user_id" `
 	ServiceID  uint                   `json:"service_id" binding:"required"`
 	PackageID  uint                   `json:"package_id" binding:"required"`
 	IsPickup   bool                   `json:"is_pickup"`

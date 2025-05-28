@@ -1,4 +1,3 @@
-basePath: /
 definitions:
   api_cleanease_features_laundry_packages_dtos.Pagination:
     properties:
@@ -43,7 +42,6 @@ definitions:
     required:
     - package_id
     - service_id
-    - user_id
     type: object
   dtos.InputPackages:
     properties:
@@ -259,19 +257,11 @@ definitions:
         example: true
         type: boolean
     type: object
-host: localhost:8001
 info:
-  contact:
-    email: support@swagger.io
-    name: API Support
-    url: http://www.swagger.io/support
-  description: API for CleanEase laundry management system
-  license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
-  termsOfService: http://swagger.io/terms/
-  title: CleanEase API
-  version: "1.0"
+  contact: {}
+  description: API Documentation for Cleanease
+  title: Example API
+  version: "2.0"
 paths:
   /auth:
     get:
@@ -1191,6 +1181,9 @@ paths:
       summary: Update an existing user
       tags:
       - users
-schemes:
-- http
+securityDefinitions:
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

@@ -125,7 +125,7 @@ func (ctl *controller) CreateOrders(c *gin.Context) {
 	var input dtos.InputOrders
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse("Invalid request!"))
+		c.JSON(http.StatusBadRequest, helpers.BuildErrorResponse("Invalid request!"+err.Error()))
 		return
 	}
 
@@ -143,7 +143,7 @@ func (ctl *controller) CreateOrders(c *gin.Context) {
 
 	userID, exists := c.Get("user_id")
 	if !exists {
-		c.JSON(401, gin.H{"error": "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, helpers.BuildErrorResponse(err.Error()))
 		return
 	}
 	input.UserID = uint(userID.(int))

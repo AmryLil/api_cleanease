@@ -9,16 +9,7 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
-        "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
-        },
+        "contact": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -1468,8 +1459,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "package_id",
-                "service_id",
-                "user_id"
+                "service_id"
             ],
             "properties": {
                 "address": {
@@ -1815,21 +1805,27 @@ const docTemplate = `{
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
-	Host:             "localhost:8001",
-	BasePath:         "/",
-	Schemes:          []string{"http"},
-	Title:            "CleanEase API",
-	Description:      "API for CleanEase laundry management system",
+	Version:          "2.0",
+	Host:             "",
+	BasePath:         "",
+	Schemes:          []string{},
+	Title:            "Example API",
+	Description:      "API Documentation for Cleanease",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
-	LeftDelim:        "{{",
-	RightDelim:       "}}",
+
 }
 
 func init() {

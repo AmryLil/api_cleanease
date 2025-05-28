@@ -32,34 +32,29 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	// _ "api_cleanease/docs"
+	docs "api_cleanease/docs"
 
 	"github.com/gin-gonic/gin"
 )
 
-// @title CleanEase API
-// @version 1.0
-// @description API for CleanEase laundry management system
-// @termsOfService http://swagger.io/terms/
-
-// @contact.name API Support
-// @contact.url http://www.swagger.io/support
-// @contact.email support@swagger.io
-
-// @license.name MIT
-// @license.url https://opensource.org/licenses/MIT
-
-// @host localhost:8001
-// @BasePath /
-// @schemes http
+// @title           Example API
+// @version         2.0
+// @description     API Documentation for Cleanease
+// @securityDefinitions.apikey  Bearer
+// @in               header
+// @name             Authorization
 func main() {
 	r := gin.Default()
+	docs.SwaggerInfo.Host = "localhost:8001"
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
+	docs.SwaggerInfo.Title = "Cleanease API"
 	middlewares.LogMiddlewares(r)
 	cfg := config.InitConfig()
+	jwtService := helpers.NewJWT(*cfg)
 	r.GET("/", func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "hellooo!😍")
 	})
-	routes.Orders(r, OrdersHandler())
+	routes.Orders(r, OrdersHandler(), jwtService, *cfg)
 	routes.Packages(r, PackagesHandler())
 	routes.Services(r, ServicesHandler())
 	routes.Users(r, AuthHandler())
