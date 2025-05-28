@@ -32,7 +32,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	docs "api_cleanease/docs"
+	// docs "api_cleanease/docs"
 
 	"github.com/gin-gonic/gin"
 )
@@ -54,9 +54,7 @@ import (
 // @schemes http
 func main() {
 	r := gin.Default()
-	docs.SwaggerInfo.Host = "localhost:8001"
-	docs.SwaggerInfo.Schemes = []string{"http", "https"}
-	docs.SwaggerInfo.Title = "Cleanease API"
+
 	middlewares.LogMiddlewares(r)
 	cfg := config.InitConfig()
 	jwtService := helpers.NewJWT(*cfg)
