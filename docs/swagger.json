@@ -1,11 +1,25 @@
 {
+    "schemes": [
+        "http"
+    ],
     "swagger": "2.0",
     "info": {
-        "description": "API Documentation for Cleanease",
-        "title": "Example API",
-        "contact": {},
-        "version": "2.0"
+        "description": "API for CleanEase laundry management system",
+        "title": "CleanEase API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0"
     },
+    "host": "localhost:8001",
+    "basePath": "/",
     "paths": {
         "/auth": {
             "get": {
@@ -1796,13 +1810,6 @@
                     "example": true
                 }
             }
-        }
-    },
-    "securityDefinitions": {
-        "Bearer": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
         }
     }
 }
