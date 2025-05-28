@@ -1830,7 +1830,8 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "API for CleanEase laundry management system",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
-
+	LeftDelim:        "{{",
+	RightDelim:       "}}",
 }
 
 func init() {

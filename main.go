@@ -32,7 +32,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	// docs "api_cleanease/docs"
+	_ "api_cleanease/docs"
 
 	"github.com/gin-gonic/gin"
 )
@@ -51,7 +51,7 @@ import (
 // @license.url https://opensource.org/licenses/MIT
 // @host localhost:8001
 // @BasePath /
-// @schemes http httpsS
+// @schemes http https
 func main() {
 	r := gin.Default()
 
