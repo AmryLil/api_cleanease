@@ -46,6 +46,10 @@ import (
 // @contact.url http://www.swagger.io/support
 // @contact.email support@swagger.io
 
+// @securityDefinitions.apikey  Bearer
+// @in               header
+// @name             Authorization
+
 // @license.name MIT
 // @license.url https://opensource.org/licenses/MIT
 
