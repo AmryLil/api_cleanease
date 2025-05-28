@@ -258,13 +258,9 @@ definitions:
         type: boolean
     type: object
 info:
-  contact:
-    email: support@swagger.io
-    name: API Support
-    url: http://www.swagger.io/support
-  description: API for CleanEase laundry management system
-  termsOfService: http://swagger.io/terms/
-  title: CleanEase API
+  contact: {}
+  description: API Documentation for Cleanease
+  title: Example API
   version: "2.0"
 paths:
   /auth:
